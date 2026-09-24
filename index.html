@@ -86,6 +86,7 @@
     <script type="module" src="https://mengobs.github.io/WebSwift/webswift.js"></script>
     <script type="module" src="./src/javascripts/ui/menu.js"></script>
     <script type="module" src="./src/javascripts/client.js"></script>
+    <script type="module" src="./src/javascripts/story.js"></script>
     <script type="module">
         import { clickMenuItem } from "./src/javascripts/ui/menu.js";
         import { parentMenuStates, updateMenu } from "./src/javascripts/finderbar.js";
@@ -102,16 +103,7 @@
             createDesktopFile: createDesktopFile
         }
 
-        let clicked = false;
 
-        window.addEventListener("mousedown", () => {
-            if (!clicked) {
-                createNotification("./assets/icons/访达.svg", "欢迎访问 Webintosh", "点击此通知前往 GitHub 存储库<br />5 秒后将自动移除此通知", () => {
-                    window.location.href = "https://github.com/mengobs/webintosh";
-                }, "刚刚");
-                clicked = true;
-            }
-        });
     </script>
 </body>
 
