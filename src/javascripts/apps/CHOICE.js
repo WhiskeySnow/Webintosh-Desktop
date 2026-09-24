@@ -19,6 +19,13 @@ const title = win.querySelector(".choice-section-title");
 const status = win.querySelector(".choice-status");
 const closeButton = win.querySelector(".wintools .red");
 
+win.style.setProperty("position", "fixed", "important");
+win.style.setProperty("top", "45px", "important");
+win.style.setProperty("left", "50%", "important");
+win.style.setProperty("transform", "translateX(-50%)", "important");
+win.style.setProperty("width", "940px", "important");
+win.style.setProperty("height", "560px", "important");
+
 const questions = [
     {
         question: "Coffee or tea?",
@@ -47,10 +54,6 @@ const questions = [
 ];
 
 function setSection(section, statusText) {
-    win.querySelectorAll(".choice-nav").forEach(item => {
-        item.classList.toggle("active", item.dataset.section === section);
-    });
-
     title.textContent = section;
     status.textContent = statusText;
 }
