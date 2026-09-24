@@ -1,0 +1,230 @@
+.choice.window {
+    width: 830px;
+    height: 540px;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    background: white;
+}
+
+.choice-sidebar {
+    width: 190px;
+    height: 100%;
+    flex: 0 0 190px;
+    background: rgba(239, 239, 242, 0.93);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 0 10px;
+}
+
+.choice .wintools {
+    display: flex;
+    gap: 8px;
+    padding: 18px 0 14px 9px;
+}
+
+.choice .wintools div {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.choice .wintools .red {
+    background: #ff5f57;
+    border: 0.5px solid #e33e32;
+}
+
+.choice .wintools .yellow {
+    background: #febc2e;
+    border: 0.5px solid #df9f0a;
+}
+
+.choice .wintools .green {
+    background: #28c840;
+    border: 0.5px solid #1c9e2d;
+}
+
+.choice-sidebar-title {
+    color: #8b8b91;
+    font-size: 11px;
+    padding: 6px 10px 4px;
+}
+
+.choice-sidebar-title.system-title {
+    margin-top: 12px;
+}
+
+.choice-nav {
+    padding: 7px 9px;
+    margin: 1px 0;
+    border-radius: 7px;
+    font-size: 13px;
+}
+
+.choice-nav.active {
+    background: #0a84ff;
+    color: white;
+}
+
+.choice-main {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: white;
+}
+
+.choice-toolbar {
+    height: 48px;
+    flex: 0 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.choice-status {
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #f0f0f2;
+    color: #777;
+    font-size: 11px;
+}
+
+.choice-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 42px 54px;
+    text-align: center;
+}
+
+.choice-content h1 {
+    margin: 0 0 10px;
+    font-size: 32px;
+    letter-spacing: -0.6px;
+}
+
+.choice-subtitle {
+    max-width: 500px;
+    margin-bottom: 25px;
+    color: #6e6e73;
+    line-height: 1.5;
+}
+
+.choice-label {
+    margin-bottom: 9px;
+    color: #8b8b91;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.choice-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.choice-button {
+    border: 0;
+    border-radius: 8px;
+    padding: 9px 19px;
+    background: #e8e8ed;
+    color: #1d1d1f;
+    font-weight: 600;
+}
+
+.choice-button.primary {
+    background: #0a84ff;
+    color: white;
+}
+
+.choice-button.danger {
+    background: #ff453a;
+    color: white;
+}
+
+.choice-quote {
+    max-width: 560px;
+    font-size: 30px;
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: -0.6px;
+}
+
+.choice-installer-icon {
+    width: 78px;
+    height: 78px;
+    margin-bottom: 22px;
+}
+
+.choice-progress {
+    width: 280px;
+    height: 7px;
+    display: none;
+    margin-top: 18px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #d9d9de;
+}
+
+.choice-progress-bar {
+    width: 0;
+    height: 100%;
+    background: #0a84ff;
+    transition: width 1.6s ease;
+}
+
+.choice.window.dark .choice-sidebar {
+    background: #121216;
+    border-color: #25252a;
+}
+
+.choice.window.dark .choice-main {
+    background: #0a0a0d;
+    color: white;
+}
+
+.choice.window.dark .choice-toolbar {
+    border-color: #25252a;
+}
+
+.choice.window.dark .choice-sidebar-title {
+    color: #77777e;
+}
+
+.choice.window.dark .choice-nav {
+    color: #c9c9ce;
+}
+
+.choice.window.dark .choice-nav.active {
+    background: #25252c;
+    color: white;
+}
+
+.choice.window.dark .choice-status {
+    background: #1b1b20;
+    color: #999;
+}
+
+.choice.window.dark .choice-subtitle,
+.choice.window.dark .choice-label {
+    color: #aaaab0;
+}
+
+.choice.window.dark .choice-button {
+    background: #202025;
+    color: white;
+}
+
+.choice.window.dark .choice-button.primary {
+    background: white;
+    color: #111;
+}
