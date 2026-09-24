@@ -66,42 +66,6 @@ const chat = win.querySelector(".messages-chat");
 const input = win.querySelector(".messages-input");
 const sendButton = win.querySelector(".messages-send");
 
-function placeWindowAboveDock() {
-    const dockContainer = document.querySelector(".dockcontainer");
-    const finderbar = document.getElementById("finderbar");
-
-    const topLimit = finderbar
-        ? finderbar.getBoundingClientRect().bottom + 20
-        : 20;
-
-    const bottomLimit = dockContainer
-        ? dockContainer.getBoundingClientRect().top - 20
-        : window.innerHeight - 100;
-
-    const width = win.offsetWidth;
-    const height = win.offsetHeight;
-
-    const left = (window.innerWidth - width) / 2;
-
-    let top = topLimit + (bottomLimit - topLimit - height) / 2;
-
-    const highestAllowedTop = bottomLimit - height;
-
-    if (top > highestAllowedTop) {
-        top = highestAllowedTop;
-    }
-
-    if (top < topLimit) {
-        top = topLimit;
-    }
-
-    win.style.left = Math.max(0, left) + "px";
-    win.style.top = top + "px";
-}
-
-setTimeout(placeWindowAboveDock, 50);
-setTimeout(placeWindowAboveDock, 250);
-
 function contactRow(contact, active) {
     return `
         <div class="messages-contact ${active ? "active" : ""}" data-contact="${contact.name}">
