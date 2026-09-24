@@ -135,11 +135,12 @@ function avatar(name) {
 }
 
 function bubble(who, text, isLink = false) {
-    const element = document.createElement("div");
+    const element = document.createElement(isLink ? "a" : "div");
     element.className = `message-bubble ${who}`;
 
     if (isLink) {
         element.classList.add("link");
+        element.href = "#";
     }
 
     element.textContent = text;
@@ -242,17 +243,12 @@ function sendMiaLines(lines, callback) {
             const message = bubble("them", text, link);
 
             if (link) {
-                message.addEventListener("click", () => {
-                    if (win._closeWindow) {
-                        win._closeWindow();
-                    } else {
-                        win.remove();
-                    }
+                message.addEventListener("click", event => {
+                    event.preventDefault();
+                    event.stopPropagation();
 
-                    setTimeout(() => {
-                        state.screen = "installer";
-                        create("./assets/apps/CHOICE.html", "CHOICE");
-                    }, 250);
+                    state.screen = "installer";
+                    create("./assets/apps/CHOICE.html", "CHOICE");
                 });
             }
 
