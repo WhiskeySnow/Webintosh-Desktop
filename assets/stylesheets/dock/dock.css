@@ -79,8 +79,13 @@
   align-items: center;
   justify-content: center;
   width: 75%;
-  height: 56.5px;
+  height: 70px;
   padding-bottom: 5px;
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  z-index: 4;
 }
 
 .dock {
