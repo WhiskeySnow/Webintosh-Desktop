@@ -170,7 +170,7 @@ function installDesktopIcon() {
 
     item.addEventListener("dblclick", () => {
         state.screen = state.screen === "installer" ? "welcome" : state.screen;
-        create("./assets/apps/CHOICE.html", "CHOICE", null, true);
+        create("./assets/apps/CHOICE.html", "CHOICE");
     });
 
     item.addEventListener("mouseup", () => {
@@ -217,7 +217,7 @@ function checkTrashDrop(item) {
     );
 
     setTimeout(() => {
-        create("./assets/apps/CHOICE.html", "CHOICE", null, true);
+        create("./assets/apps/CHOICE.html", "CHOICE");
     }, 1800);
 }
 
@@ -604,7 +604,7 @@ function showSummary() {
         }
 
         setTimeout(() => {
-            create("./assets/apps/信息.html", "信息", null, true);
+            create("./assets/apps/信息.html", "信息");
         }, 1300);
     }, 2200);
 }
