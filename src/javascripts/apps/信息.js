@@ -173,9 +173,28 @@ function renderConversation(name) {
 
 function typePresetMessage(text, callback) {
     let visible = 0;
+    let sent = false;
+
+    function sendMessage() {
+        if (sent || !input.value) {
+            return;
+        }
+
+        sent = true;
+
+        input.removeEventListener("keydown", keyHandler);
+        sendButton.removeEventListener("click", sendMessage);
+
+        bubble("me", text);
+        input.value = "";
+
+        callback();
+    }
 
     function keyHandler(event) {
         if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
             return;
         }
 
@@ -192,29 +211,8 @@ function typePresetMessage(text, callback) {
         }
     }
 
-    function sendMessage() {
-        if (!input.value) {
-            return;
-        }
-
-        input.removeEventListener("keydown", keyHandler);
-        sendButton.removeEventListener("click", sendMessage);
-
-        bubble("me", text);
-        input.value = "";
-
-        callback();
-    }
-
     input.addEventListener("keydown", keyHandler);
     sendButton.addEventListener("click", sendMessage);
-
-    input.addEventListener("keydown", event => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            sendMessage();
-        }
-    }, { once: true });
 
     input.focus();
 }
