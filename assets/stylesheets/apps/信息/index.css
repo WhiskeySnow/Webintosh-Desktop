@@ -1,3 +1,8 @@
+.messages,
+.messages * {
+    box-sizing: border-box;
+}
+
 .messages.window {    width: 790px;
     height: 500px;
     background: white;
