@@ -224,7 +224,16 @@ export function resetWindowListeners(name, light = null) {
 
 function addWindowDrag(windowElement, name) {
   windowElement.addEventListener("mousedown", function (e) {
-    if (e.target.closest(".wintools div") || e.target.closest(".resizer")) {
+    if (
+      e.target.closest(".wintools div") ||
+      e.target.closest(".resizer") ||
+      e.target.closest("input") ||
+      e.target.closest("textarea") ||
+      e.target.closest("button") ||
+      e.target.closest("select") ||
+      e.target.closest("a") ||
+      e.target.closest('[contenteditable="true"]')
+    ) {
       return;
     }
 
