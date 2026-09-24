@@ -1,4 +1,7 @@
 .choice.window {
+    top: 90px !important;
+    left: calc(50% - 415px) !important;
+
     width: 830px;
     height: 540px;
     display: flex;
