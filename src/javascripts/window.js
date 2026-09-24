@@ -8,6 +8,82 @@ window.specialCloses = {};
 let activeDraggingWindow = null;
 let activeResizingWindow = null;
 
+function getWorkspaceBounds() {
+  const finderbar = document.getElementById("finderbar");
+  const dockContainer = document.querySelector(".dockcontainer");
+
+  const top = finderbar ? finderbar.getBoundingClientRect().bottom : 0;
+
+  let bottom = window.innerHeight;
+
+  if (dockContainer) {
+    const dockRect = dockContainer.getBoundingClientRect();
+
+    if (dockRect.top > 0 && dockRect.top < window.innerHeight) {
+      bottom = dockRect.top;
+    }
+  }
+
+  return {
+    top,
+    bottom,
+    left: 0,
+    right: window.innerWidth,
+    width: window.innerWidth,
+    height: Math.max(0, bottom - top)
+  };
+}
+
+function clampWindowToWorkspace(win, center = false) {
+  if (!win) return;
+
+  const workspace = getWorkspaceBounds();
+
+  if (win.offsetHeight > workspace.height) {
+    win.style.height = workspace.height + "px";
+  }
+
+  if (win.offsetWidth > workspace.width) {
+    win.style.width = workspace.width + "px";
+  }
+
+  const width = win.offsetWidth;
+  const height = win.offsetHeight;
+
+  let left = parseFloat(win.style.left);
+  let top = parseFloat(win.style.top);
+
+  if (Number.isNaN(left)) {
+    left = win.getBoundingClientRect().left;
+  }
+
+  if (Number.isNaN(top)) {
+    top = win.getBoundingClientRect().top;
+  }
+
+  if (center) {
+    left = workspace.left + (workspace.width - width) / 2;
+    top = workspace.top + (workspace.height - height) / 2;
+  }
+
+  const maxLeft = Math.max(workspace.left, workspace.right - width);
+  const maxTop = Math.max(workspace.top, workspace.bottom - height);
+
+  left = Math.min(Math.max(left, workspace.left), maxLeft);
+  top = Math.min(Math.max(top, workspace.top), maxTop);
+
+  win.style.left = left + "px";
+  win.style.top = top + "px";
+}
+
+function clampAllWindowsToWorkspace() {
+  document.querySelectorAll(".window").forEach((win) => {
+    if (!win.isFullscreen && !win.isStretched) {
+      clampWindowToWorkspace(win, false);
+    }
+  });
+}
+
 export function create(file, name, light = null, centered = false) {
   const cleanFile = file.split("/").pop().split(".")[0];
   if (!name) name = cleanFile;
@@ -36,14 +112,15 @@ export function create(file, name, light = null, centered = false) {
           const newWin = wins[wins.length - 1];
           if (newWin && !newWin.id) newWin.id = name;
 
-          if (centered) {
-            newWin.style.left = `${(window.innerWidth - newWin.offsetWidth) / 2}px`;
-            newWin.style.top = `${(window.innerHeight - newWin.offsetHeight) / 2}px`;
-            setTimeout(() => {
-              newWin.style.left = `${(window.innerWidth - newWin.offsetWidth) / 2}px`;
-              newWin.style.top = `${(window.innerHeight - newWin.offsetHeight) / 2}px`;
-            }, 50);
-          }
+          clampWindowToWorkspace(newWin, centered);
+
+          setTimeout(() => {
+            clampWindowToWorkspace(newWin, centered);
+          }, 50);
+
+          setTimeout(() => {
+            clampWindowToWorkspace(newWin, centered);
+          }, 200);
 
           const resizer = document.createElement("div");
           resizer.className = "resizer";
@@ -113,23 +190,23 @@ export function resetWindowListeners(name, light = null) {
           "left 0.3s ease, top 0.3s ease, width 0.3s ease, height 0.3s ease";
       }
       if (!win.isStretched) {
-        const finderbar = document.getElementById("finderbar");
-        const dock = document.getElementsByClassName("dockcontainer")[0];
-        const finderbarHeight = finderbar ? finderbar.offsetHeight : 0;
-        const dockHeight = dock ? dock.offsetHeight : 0;
+        const workspace = getWorkspaceBounds();
+
         win._preStretchState = {
           left: win.style.left,
           top: win.style.top,
           width: win.style.width,
           height: win.style.height,
         };
+
         setWindowPosition(
           win,
-          "0",
-          finderbarHeight + "px",
-          "100vw",
-          `calc(100vh - ${finderbarHeight}px - ${dockHeight}px)`,
+          workspace.left + "px",
+          workspace.top + "px",
+          workspace.width + "px",
+          workspace.height + "px",
         );
+
         win.isStretched = true;
       } else {
         if (win._preStretchState) {
@@ -142,6 +219,7 @@ export function resetWindowListeners(name, light = null) {
           );
         }
         win.isStretched = false;
+        clampWindowToWorkspace(win, false);
       }
       if (withTransition) {
         setTimeout(() => {
@@ -163,7 +241,17 @@ export function resetWindowListeners(name, light = null) {
           height: win.style.height,
           zIndex: win.style.zIndex,
         };
-        setWindowPosition(win, "0", "0", "100vw", `100vh`, 2050);
+        const workspace = getWorkspaceBounds();
+
+        setWindowPosition(
+          win,
+          workspace.left + "px",
+          workspace.top + "px",
+          workspace.width + "px",
+          workspace.height + "px",
+          2050
+        );
+
         win.isFullscreen = true;
       } else {
         if (win._preFullscreenState) {
@@ -177,6 +265,7 @@ export function resetWindowListeners(name, light = null) {
           );
         }
         win.isFullscreen = false;
+        clampWindowToWorkspace(win, false);
       }
       if (withTransition) {
         setTimeout(() => {
@@ -260,23 +349,55 @@ document.addEventListener("mousemove", function (e) {
       element._toggleFullscreenWindow(false);
     }
 
+    const workspace = getWorkspaceBounds();
+
     const newX = e.clientX - offsetX;
     const newY = e.clientY - offsetY;
 
-    const minY = fd ? fd.offsetHeight : 0;
-    const clampedY = Math.max(minY, newY);
+    const maxX = Math.max(
+      workspace.left,
+      workspace.right - element.offsetWidth
+    );
 
-    element.style.left = newX + "px";
+    const maxY = Math.max(
+      workspace.top,
+      workspace.bottom - element.offsetHeight
+    );
+
+    const clampedX = Math.min(
+      Math.max(newX, workspace.left),
+      maxX
+    );
+
+    const clampedY = Math.min(
+      Math.max(newY, workspace.top),
+      maxY
+    );
+
+    element.style.left = clampedX + "px";
     element.style.top = clampedY + "px";
   }
 
   if (activeResizingWindow) {
+    const workspace = getWorkspaceBounds();
     const rect = activeResizingWindow.getBoundingClientRect();
-    const newWidth = e.clientX - rect.left;
-    const newHeight = e.clientY - rect.top;
 
-    if (newWidth > 200) activeResizingWindow.style.width = newWidth + "px";
-    if (newHeight > 150) activeResizingWindow.style.height = newHeight + "px";
+    const requestedWidth = e.clientX - rect.left;
+    const requestedHeight = e.clientY - rect.top;
+
+    const maxWidth = workspace.right - rect.left;
+    const maxHeight = workspace.bottom - rect.top;
+
+    const newWidth = Math.min(requestedWidth, maxWidth);
+    const newHeight = Math.min(requestedHeight, maxHeight);
+
+    if (newWidth > 200) {
+      activeResizingWindow.style.width = newWidth + "px";
+    }
+
+    if (newHeight > 150) {
+      activeResizingWindow.style.height = newHeight + "px";
+    }
   }
 });
 
@@ -293,6 +414,10 @@ document.addEventListener("mouseup", function () {
     activeDraggingWindow = null;
   }
   activeResizingWindow = null;
+});
+
+window.addEventListener("resize", () => {
+  setTimeout(clampAllWindowsToWorkspace, 0);
 });
 
 export function bringToFront(windowElement, name) {
