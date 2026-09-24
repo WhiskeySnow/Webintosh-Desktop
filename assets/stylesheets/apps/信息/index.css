@@ -1,0 +1,215 @@
+.messages.window {
+    width: 790px;
+    height: 535px;
+    background: white;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+}
+
+.messages .messages-sidebar {
+    width: 230px;
+    height: 100%;
+    background: rgba(239, 239, 242, 0.92);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 0 8px 10px;
+    flex-shrink: 0;
+}
+
+.messages .wintools {
+    display: flex;
+    gap: 8px;
+    padding: 18px 0 14px 10px;
+}
+
+.messages .wintools div {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.messages .wintools .red {
+    background: #ff5f57;
+    border: 0.5px solid #e33e32;
+}
+
+.messages .wintools .yellow {
+    background: #febc2e;
+    border: 0.5px solid #df9f0a;
+}
+
+.messages .wintools .green {
+    background: #28c840;
+    border: 0.5px solid #1c9e2d;
+}
+
+.messages-search {
+    height: 29px;
+    border-radius: 7px;
+    background: rgba(120, 120, 128, 0.12);
+    color: #777;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    padding: 0 9px;
+    margin: 0 3px 8px;
+}
+
+.messages-contacts {
+    height: calc(100% - 78px);
+    overflow-y: auto;
+}
+
+.messages-contact {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px;
+    border-radius: 8px;
+    margin: 1px 0;
+}
+
+.messages-contact.active {
+    background: #0a84ff;
+    color: white;
+}
+
+.messages-avatar {
+    width: 39px;
+    height: 39px;
+    flex: 0 0 39px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.messages-contact-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.messages-contact-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.messages-contact-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.messages-contact-time {
+    font-size: 10px;
+    opacity: 0.55;
+}
+
+.messages-contact-preview {
+    max-width: 145px;
+    font-size: 11px;
+    opacity: 0.65;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.messages-main {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: white;
+}
+
+.messages-header {
+    height: 55px;
+    flex: 0 0 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.messages-header .messages-avatar {
+    width: 31px;
+    height: 31px;
+    flex-basis: 31px;
+    margin-right: 8px;
+    font-size: 11px;
+}
+
+.messages-chat {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 18px 24px 12px;
+}
+
+.message-bubble {
+    max-width: 72%;
+    padding: 7px 11px;
+    border-radius: 17px;
+    font-size: 13.5px;
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+.message-bubble.them {
+    align-self: flex-start;
+    background: #e9e9ed;
+    color: #111;
+    border-bottom-left-radius: 5px;
+}
+
+.message-bubble.me {
+    align-self: flex-end;
+    background: #0a84ff;
+    color: white;
+    border-bottom-right-radius: 5px;
+}
+
+.message-bubble.link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.messages-compose {
+    min-height: 54px;
+    flex: 0 0 54px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 13px 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.messages-input {
+    flex: 1;
+    height: 34px;
+    border: 1px solid #c8c8cc;
+    border-radius: 17px;
+    padding: 7px 12px;
+    outline: none;
+    color: #222;
+    background: white;
+}
+
+.messages-send {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    background: #0a84ff;
+    color: white;
+    font-weight: 700;
+}
