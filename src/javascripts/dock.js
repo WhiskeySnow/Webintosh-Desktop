@@ -21,6 +21,28 @@ const DOCK_TRANSITION = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
 let dock_zoom = false;
 let currentImg = null;
 
+function pinDockToBottom() {
+    document.body.appendChild(dockcontainer);
+
+    dockcontainer.style.setProperty("position", "fixed", "important");
+    dockcontainer.style.setProperty("left", "50%", "important");
+    dockcontainer.style.setProperty("right", "auto", "important");
+    dockcontainer.style.setProperty("top", "auto", "important");
+    dockcontainer.style.setProperty("bottom", "0px", "important");
+    dockcontainer.style.setProperty("transform", "translateX(-50%)", "important");
+    dockcontainer.style.setProperty("margin", "0", "important");
+    dockcontainer.style.setProperty("width", "75%", "important");
+    dockcontainer.style.setProperty("height", "70px", "important");
+    dockcontainer.style.setProperty("z-index", "4", "important");
+
+    dock.style.setProperty("position", "relative", "important");
+    dock.style.setProperty("top", "auto", "important");
+    dock.style.setProperty("bottom", "0px", "important");
+}
+
+pinDockToBottom();
+window.addEventListener("resize", pinDockToBottom);
+
 function bindClickEvent(img, light, app) {
     img.addEventListener("mouseup", () => {
         if (appStatus[img.alt] == true) {
