@@ -60,6 +60,13 @@ const backgroundChats = {
 };
 
 const win = document.getElementById("信息");
+
+win.style.setProperty("position", "fixed", "important");
+win.style.setProperty("top", "40px", "important");
+win.style.setProperty("left", "50%", "important");
+win.style.setProperty("transform", "translateX(-50%)", "important");
+win.style.setProperty("width", "790px", "important");
+win.style.setProperty("height", "500px", "important");
 const sidebar = win.querySelector(".messages-contacts");
 const header = win.querySelector(".messages-header");
 const chat = win.querySelector(".messages-chat");
