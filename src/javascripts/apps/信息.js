@@ -244,7 +244,7 @@ function sendMiaLines(lines, callback) {
 
                     setTimeout(() => {
                         state.screen = "installer";
-                        create("./assets/apps/CHOICE.html", "CHOICE", null, true);
+                        create("./assets/apps/CHOICE.html", "CHOICE");
                     }, 250);
                 });
             }
