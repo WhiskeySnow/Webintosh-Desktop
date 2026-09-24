@@ -25,7 +25,7 @@ function startChoiceStory() {
             "you need to try this lol",
             () => {
                 window.choiceStory.messageMode = "mia";
-                create("./assets/apps/信息.html", "信息", null, true);
+                create("./assets/apps/信息.html", "信息");
             },
             "Now"
         );
