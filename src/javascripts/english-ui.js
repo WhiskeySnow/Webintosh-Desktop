@@ -71,37 +71,8 @@ function translateElement(root) {
     });
 }
 
-function updateFinderbarDate() {
-    const dateElement = document.querySelector(".finderbar .right .date");
-    const timeElement = document.querySelector(".finderbar .right .time");
-
-    if (!dateElement || !timeElement) return;
-
-    const now = new Date();
-
-    const newDate = now.toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric"
-    });
-
-    const newTime = now.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit"
-    });
-
-    if (dateElement.textContent !== newDate) {
-        dateElement.textContent = newDate;
-    }
-
-    if (timeElement.textContent !== newTime) {
-        timeElement.textContent = newTime;
-    }
-}
-
 function translateExistingUI() {
     translateElement(document.body);
-    updateFinderbarDate();
 }
 
 const observer = new MutationObserver(mutations => {
@@ -136,5 +107,4 @@ window.addEventListener("load", () => {
     setTimeout(translateExistingUI, 300);
     setTimeout(translateExistingUI, 800);
 
-    setInterval(updateFinderbarDate, 1000);
 });
