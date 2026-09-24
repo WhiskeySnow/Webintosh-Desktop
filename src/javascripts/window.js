@@ -17,7 +17,9 @@ export function create(file, name, light = null, centered = false) {
     return;
   }
 
-  fetch(file)
+  const fileUrl = file + (file.includes("?") ? "&" : "?") + "v=" + Date.now();
+
+  fetch(fileUrl)
     .then((response) => {
       if (response.status !== 200) {
         createAlert(
