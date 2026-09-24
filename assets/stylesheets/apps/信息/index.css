@@ -1,9 +1,5 @@
-.messages.window {
-    top: 90px !important;
-    left: calc(50% - 395px) !important;
-
-    width: 790px;
-    height: 535px;
+.messages.window {    width: 790px;
+    height: 500px;
     background: white;
     display: flex;
     align-items: stretch;
