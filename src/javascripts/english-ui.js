@@ -45,56 +45,85 @@ const exactText = {
     "好": "OK"
 };
 
-function translateTextNode(node) {
-    const original = node.nodeValue;
-    const trimmed = original.trim();
-    if (!trimmed) return;
-    if (exactText[trimmed]) {
-        node.nodeValue = original.replace(trimmed, exactText[trimmed]);
-    }
-}
+function translateElement(root) {
+    if (!root) return;
 
-function translateTree(root) {
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const walker = document.createTreeWalker(
+        root,
+        NodeFilter.SHOW_TEXT
+    );
+
     const nodes = [];
-    while (walker.nextNode()) nodes.push(walker.currentNode);
-    nodes.forEach(translateTextNode);
+
+    while (walker.nextNode()) {
+        nodes.push(walker.currentNode);
+    }
+
+    nodes.forEach(node => {
+        const original = node.nodeValue;
+        const trimmed = original.trim();
+
+        if (!trimmed) return;
+
+        if (exactText[trimmed]) {
+            node.nodeValue = original.replace(trimmed, exactText[trimmed]);
+        }
+    });
 }
 
 function updateFinderbarDate() {
     const dateElement = document.querySelector(".finderbar .right .date");
     const timeElement = document.querySelector(".finderbar .right .time");
+
     if (!dateElement || !timeElement) return;
 
     const now = new Date();
 
-    dateElement.textContent = now.toLocaleDateString("en-US", {
+    const newDate = now.toLocaleDateString("en-US", {
         weekday: "short",
         month: "short",
         day: "numeric"
     });
 
-    timeElement.textContent = now.toLocaleTimeString("en-US", {
+    const newTime = now.toLocaleTimeString("en-US", {
         hour: "numeric",
         minute: "2-digit"
     });
+
+    if (dateElement.textContent !== newDate) {
+        dateElement.textContent = newDate;
+    }
+
+    if (timeElement.textContent !== newTime) {
+        timeElement.textContent = newTime;
+    }
 }
 
-function updateDockTooltip() {
-    const tip = document.querySelector("body > .tip");
-    if (!tip) return;
-
-    const text = tip.textContent.trim();
-    if (exactText[text]) tip.textContent = exactText[text];
-}
-
-function translateVisibleUI() {
-    translateTree(document.body);
+function translateExistingUI() {
+    translateElement(document.body);
     updateFinderbarDate();
-    updateDockTooltip();
 }
 
-const observer = new MutationObserver(translateVisibleUI);
+const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                translateElement(node);
+            }
+
+            if (node.nodeType === Node.TEXT_NODE) {
+                const trimmed = node.nodeValue.trim();
+
+                if (exactText[trimmed]) {
+                    node.nodeValue = node.nodeValue.replace(
+                        trimmed,
+                        exactText[trimmed]
+                    );
+                }
+            }
+        });
+    });
+});
 
 observer.observe(document.body, {
     childList: true,
@@ -102,12 +131,10 @@ observer.observe(document.body, {
 });
 
 window.addEventListener("load", () => {
-    translateVisibleUI();
-    setTimeout(translateVisibleUI, 300);
-    setTimeout(translateVisibleUI, 800);
+    translateExistingUI();
 
-    setInterval(() => {
-        updateFinderbarDate();
-        updateDockTooltip();
-    }, 500);
+    setTimeout(translateExistingUI, 300);
+    setTimeout(translateExistingUI, 800);
+
+    setInterval(updateFinderbarDate, 1000);
 });
