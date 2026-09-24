@@ -132,16 +132,20 @@ document.addEventListener("click", () => {
 
 function updateTime() {
     const currentDateTime = new Date();
-    const hours = currentDateTime.getHours().toString().padStart(2, '0');
-    const minutes = currentDateTime.getMinutes().toString().padStart(2, '0');
-    let day = currentDateTime.getDate();
-    let month = currentDateTime.getMonth() + 1;
-    const days = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
-    let weekDay = days[currentDateTime.getDay()];
-    day = day.toString();
-    month = month.toString();
-    dateControl.innerHTML = `${month} 月 ${day} 日 ${weekDay}`;
-    timeControl.innerHTML = `${hours}：${minutes}`;
+
+    dateControl.innerHTML = currentDateTime
+        .toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric"
+        })
+        .replace(",", "");
+
+    timeControl.innerHTML = currentDateTime
+        .toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit"
+        });
 }
 
 updateMenu("访达");
