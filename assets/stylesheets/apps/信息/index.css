@@ -1,4 +1,7 @@
 .messages.window {
+    top: 90px !important;
+    left: calc(50% - 395px) !important;
+
     width: 790px;
     height: 535px;
     background: white;
