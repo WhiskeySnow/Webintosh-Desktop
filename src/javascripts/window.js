@@ -225,6 +225,10 @@ export function resetWindowListeners(name, light = null) {
 }
 
 function addWindowDrag(windowElement, name) {
+  if (name === "信息" || name === "CHOICE") {
+    return;
+  }
+
   windowElement.addEventListener("mousedown", function (e) {
     if (
       e.target.closest(".wintools div") ||
