@@ -65,8 +65,8 @@ win.style.setProperty("position", "fixed", "important");
 win.style.setProperty("top", "40px", "important");
 win.style.setProperty("left", "50%", "important");
 win.style.setProperty("transform", "translateX(-50%)", "important");
-win.style.setProperty("width", "790px", "important");
-win.style.setProperty("height", "500px", "important");
+win.style.setProperty("width", "900px", "important");
+win.style.setProperty("height", "560px", "important");
 const sidebar = win.querySelector(".messages-contacts");
 const header = win.querySelector(".messages-header");
 const chat = win.querySelector(".messages-chat");
@@ -76,7 +76,7 @@ const sendButton = win.querySelector(".messages-send");
 function contactRow(contact, active) {
     return `
         <div class="messages-contact ${active ? "active" : ""}" data-contact="${contact.name}">
-            <div class="messages-avatar" style="background:${contact.color}">${contact.initial}</div>
+            <div class="messages-avatar">${contact.initial}</div>
             <div class="messages-contact-copy">
                 <div class="messages-contact-top">
                     <div class="messages-contact-name">${contact.name}</div>
@@ -128,8 +128,28 @@ function avatar(name) {
         : contacts.find(contact => contact.name === name);
 
     return `
-        <div class="messages-avatar" style="background:${contact.color}">
+        <div class="messages-avatar">
             ${contact.initial}
+        </div>
+    `;
+}
+
+function headerControls() {
+    return `
+        <div class="messages-header-actions">
+            <button class="messages-header-button" type="button" aria-label="Start FaceTime call">
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                    <rect x="2.5" y="5" width="10" height="10" rx="2.4"></rect>
+                    <path d="m12.5 8 4-2.2v8.4l-4-2.2z"></path>
+                </svg>
+            </button>
+            <button class="messages-header-button" type="button" aria-label="Conversation details">
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                    <circle cx="10" cy="10" r="7.3"></circle>
+                    <path d="M10 8.4v5"></path>
+                    <circle cx="10" cy="5.9" r=".7" fill="currentColor" stroke="none"></circle>
+                </svg>
+            </button>
         </div>
     `;
 }
@@ -152,7 +172,13 @@ function bubble(who, text, isLink = false) {
 
 function clearConversation(name) {
     renderSidebar(name);
-    header.innerHTML = `${avatar(name)}${name}`;
+    header.innerHTML = `
+        <div class="messages-header-identity">
+            ${avatar(name)}
+            <div class="messages-header-name">${name}</div>
+        </div>
+        ${headerControls()}
+    `;
     chat.innerHTML = "";
     input.value = "";
     input.disabled = false;
