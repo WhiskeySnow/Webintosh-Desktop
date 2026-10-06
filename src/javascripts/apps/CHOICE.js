@@ -13,7 +13,7 @@ window.choiceStory = window.choiceStory || {
 };
 
 const state = window.choiceStory;
-const win = document.getElementById("CHOICE");
+const win = document.getElementById("VOLI");
 const content = win.querySelector(".choice-content");
 const title = win.querySelector(".choice-section-title");
 const status = win.querySelector(".choice-status");
@@ -107,7 +107,7 @@ function showInstaller() {
 
     content.innerHTML = `
         <img class="choice-installer-icon" src="./assets/icons/CHOICE.svg">
-        <h1>CHOICE</h1>
+        <h1>VOLI</h1>
         <div class="choice-subtitle">How well can an algorithm know you?</div>
         <button class="choice-button primary choice-download-button">Download for macOS</button>
         <div class="choice-progress">
@@ -138,8 +138,8 @@ function showInstaller() {
 
             createNotification(
                 "./assets/icons/CHOICE.svg",
-                "CHOICE",
-                "CHOICE was added to the Desktop.",
+                "VOLI",
+                "VOLI was added to the Desktop.",
                 null,
                 "Now"
             );
@@ -160,7 +160,7 @@ function installDesktopIcon() {
         return;
     }
 
-    const item = createDesktopFile("file", "CHOICE");
+    const item = createDesktopFile("file", "VOLI");
     const icon = item.querySelector("img");
     const name = item.querySelector("p");
 
@@ -173,7 +173,7 @@ function installDesktopIcon() {
 
     item.addEventListener("dblclick", () => {
         state.screen = state.screen === "installer" ? "welcome" : state.screen;
-        create("./assets/apps/CHOICE.html", "CHOICE");
+        create("./assets/apps/CHOICE.html", "VOLI");
     });
 
     item.addEventListener("mouseup", () => {
@@ -214,13 +214,13 @@ function checkTrashDrop(item) {
     createNotification(
         "./assets/icons/访达.svg",
         "Finder",
-        "“CHOICE” can’t be moved to the Trash because it is in use.",
+        "“VOLI” can’t be moved to the Trash because it is in use.",
         null,
         "Now"
     );
 
     setTimeout(() => {
-        create("./assets/apps/CHOICE.html", "CHOICE");
+        create("./assets/apps/CHOICE.html", "VOLI");
     }, 1800);
 }
 
@@ -499,7 +499,7 @@ function showControlConfirmed() {
         "Control confirmed.",
         [
             {
-                label: "Quit CHOICE",
+                label: "Quit VOLI",
                 danger: true,
                 action: () => closeButton.click()
             }
@@ -515,7 +515,7 @@ function armDeletion() {
         createNotification(
             "./assets/icons/访达.svg",
             "Finder",
-            "Drag CHOICE to Trash.",
+            "Drag VOLI to Trash.",
             null,
             "Now"
         );

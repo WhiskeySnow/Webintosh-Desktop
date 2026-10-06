@@ -225,7 +225,7 @@ export function resetWindowListeners(name, light = null) {
 }
 
 function addWindowDrag(windowElement, name) {
-  if (name === "信息" || name === "CHOICE") {
+  if (name === "信息" || name === "VOLI") {
     return;
   }
 

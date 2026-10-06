@@ -292,7 +292,7 @@ function sendMiaLines(lines, callback) {
             setTimeout(() => {
                 indicator.remove();
 
-                const link = text === "choice.app/download";
+                const link = text === "voli.app/download";
                 const message = bubble("them", text, link);
 
                 if (link) {
@@ -301,7 +301,7 @@ function sendMiaLines(lines, callback) {
                         event.stopPropagation();
 
                         state.screen = "installer";
-                        create("./assets/apps/CHOICE.html", "CHOICE");
+                        create("./assets/apps/CHOICE.html", "VOLI");
                     });
                 }
 
@@ -333,7 +333,7 @@ function runMiaConversation() {
                 state.miaStep = 2;
 
                 sendMiaLines([
-                    "choice.app/download",
+                    "voli.app/download",
                     "tell me if it gets you right lol"
                 ]);
             });
@@ -364,7 +364,7 @@ function runDanielEnding() {
         "do you want to try something fun???",
         "i found this weird app",
         "it tries to guess what you're gonna choose lol",
-        "choice.app/download"
+        "voli.app/download"
     ];
 
     let index = 0;
@@ -384,7 +384,7 @@ function runDanielEnding() {
 
         typeAutomatically(text, () => {
             setTimeout(() => {
-                bubble("me", text, text === "choice.app/download");
+                bubble("me", text, text === "voli.app/download");
                 input.value = "";
                 input.disabled = true;
                 index += 1;

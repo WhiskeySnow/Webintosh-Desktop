@@ -15,7 +15,7 @@ window.choiceStory = window.choiceStory || {
 };
 
 appMenu["信息"] = ["File", "Edit", "View", "Window", "Help"];
-appMenu["CHOICE"] = ["File", "Edit", "View", "Window", "Help"];
+appMenu["VOLI"] = ["File", "Edit", "View", "Window", "Help"];
 
 function startChoiceStory() {
     setTimeout(() => {
