@@ -254,6 +254,27 @@ function typePresetMessage(text, callback) {
 function sendMiaLines(lines, callback) {
     let index = 0;
 
+    function typingTime(text) {
+        const millisecondsPerCharacter = 44;
+        const baseDelay = 420;
+        const minimumDelay = 850;
+        const maximumDelay = 3800;
+        const calculatedDelay = baseDelay + text.length * millisecondsPerCharacter;
+
+        return Math.min(maximumDelay, Math.max(minimumDelay, calculatedDelay));
+    }
+
+    function showTypingIndicator() {
+        const indicator = document.createElement("div");
+        indicator.className = "message-bubble them messages-typing-indicator";
+        indicator.setAttribute("aria-label", "Mia is typing");
+        indicator.innerHTML = "<span></span><span></span><span></span>";
+        chat.appendChild(indicator);
+        chat.scrollTop = chat.scrollHeight;
+
+        return indicator;
+    }
+
     function sendNext() {
         if (index >= lines.length) {
             if (callback) {
@@ -262,25 +283,32 @@ function sendMiaLines(lines, callback) {
             return;
         }
 
+        const text = lines[index];
+        const pauseBeforeTyping = index === 0 ? 500 : 650;
+
         setTimeout(() => {
-            const text = lines[index];
-            const link = text === "choice.app/download";
+            const indicator = showTypingIndicator();
 
-            const message = bubble("them", text, link);
+            setTimeout(() => {
+                indicator.remove();
 
-            if (link) {
-                message.addEventListener("click", event => {
-                    event.preventDefault();
-                    event.stopPropagation();
+                const link = text === "choice.app/download";
+                const message = bubble("them", text, link);
 
-                    state.screen = "installer";
-                    create("./assets/apps/CHOICE.html", "CHOICE");
-                });
-            }
+                if (link) {
+                    message.addEventListener("click", event => {
+                        event.preventDefault();
+                        event.stopPropagation();
 
-            index += 1;
-            sendNext();
-        }, 600);
+                        state.screen = "installer";
+                        create("./assets/apps/CHOICE.html", "CHOICE");
+                    });
+                }
+
+                index += 1;
+                sendNext();
+            }, typingTime(text));
+        }, pauseBeforeTyping);
     }
 
     sendNext();

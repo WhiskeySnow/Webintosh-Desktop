@@ -139,7 +139,7 @@ function showInstaller() {
             createNotification(
                 "./assets/icons/CHOICE.svg",
                 "CHOICE",
-                "CHOICE.app was added to the Desktop.",
+                "CHOICE was added to the Desktop.",
                 null,
                 "Now"
             );
@@ -160,7 +160,7 @@ function installDesktopIcon() {
         return;
     }
 
-    const item = createDesktopFile("file", "CHOICE.app");
+    const item = createDesktopFile("file", "CHOICE");
     const icon = item.querySelector("img");
     const name = item.querySelector("p");
 
@@ -214,7 +214,7 @@ function checkTrashDrop(item) {
     createNotification(
         "./assets/icons/访达.svg",
         "Finder",
-        "“CHOICE.app” can’t be moved to the Trash because it is in use.",
+        "“CHOICE” can’t be moved to the Trash because it is in use.",
         null,
         "Now"
     );
@@ -515,7 +515,7 @@ function armDeletion() {
         createNotification(
             "./assets/icons/访达.svg",
             "Finder",
-            "Drag CHOICE.app to Trash.",
+            "Drag CHOICE to Trash.",
             null,
             "Now"
         );

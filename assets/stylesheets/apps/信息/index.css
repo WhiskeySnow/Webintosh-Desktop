@@ -381,6 +381,44 @@
     color: #fff;
 }
 
+.messages-typing-indicator {
+    width: 46px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0;
+}
+
+.messages-typing-indicator span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #8e8e93;
+    animation: messagesTypingDot 1.2s ease-in-out infinite;
+}
+
+.messages-typing-indicator span:nth-child(2) {
+    animation-delay: 0.16s;
+}
+
+.messages-typing-indicator span:nth-child(3) {
+    animation-delay: 0.32s;
+}
+
+@keyframes messagesTypingDot {
+    0%, 60%, 100% {
+        opacity: 0.45;
+        transform: translateY(0);
+    }
+
+    30% {
+        opacity: 1;
+        transform: translateY(-2px);
+    }
+}
+
 .messages-compose {
     min-height: 51px;
     flex: 0 0 51px;
