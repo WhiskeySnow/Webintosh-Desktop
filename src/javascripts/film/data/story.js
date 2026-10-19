@@ -118,3 +118,66 @@ export const DAYS = [
     { day: 40, date: at(11, 23, 8, 12), acceptedIn: 0, items: [],
         note: "Today’s choices were made for you." }
 ];
+
+// Camera notes for Premiere, keyed by scene and beat (spec §7).
+export const SHOTS = {
+    "00-cold-open": {
+        hold: "从 130% 对准 “I just” 开始",
+        "to-file": "随光标移向桌面，慢慢拉到 100%",
+        "mia-notify": "通知出现时向右上角轻推"
+    },
+    "01-mia": {
+        "type-what": "推到 160% 对准输入框",
+        "type-send": "推到 160% 对准输入框",
+        link: "链接卡片出现时拉回 120%"
+    },
+    "02-install": {
+        download: "140% 跟着下载 → Finder",
+        gatekeeper: "安全警告居中 150%"
+    },
+    "03-questions": {
+        q1: "120% 不动",
+        "q4-hover": "悬停的 2.3 秒里缓慢推到 200% 对准 Stay comfortable"
+    },
+    "04-observation": {
+        observation: "卡片静止",
+        line: "那句话出现后，5 秒内极慢推近 5%",
+        silence: "低频嗡鸣进入"
+    },
+    "05-responsibility": {
+        prompt: "150% 对准权限弹窗",
+        settings: "平移到系统设置",
+        "stop-short": "200% 对准开关"
+    },
+    "06-handover": {
+        takeover: "从这一帧起镜头停止漂移（之后只用线性关键帧）",
+        "roomtone-out": "房间底噪 2 秒内淡出，之后不再出现"
+    },
+    "07-autopilot": {
+        doc: "线性匀速平移到文档，停 2 秒",
+        sticky: "线性匀速平移到便利贴，停 2 秒",
+        rename: "线性匀速平移到文件名，停 2 秒"
+    },
+    "08-mia-again": {
+        "yeah-delete": "200% 对准 Messages 输入框",
+        erase: "停在字被逐个删掉的过程上"
+    },
+    "09-cant-quit": {
+        start: "回到 100%，漂移恢复"
+    },
+    "10-days": {
+        "day-1": "硬切进入白天；在菜单栏日期变化这一帧切",
+        "day-4": "跳切",
+        "day-9": "跳切",
+        "day-23": "跳切",
+        "day-40": "跳切",
+        grid: "拉远由网页渲染，Premiere 只加少量运动模糊",
+        "music-stop": "音乐戛然而止，静止 2 秒"
+    },
+    "11-pass-it-on": {
+        start: "硬切回深夜",
+        "messages-open": "100% 看 Messages 自己打字",
+        "daniel-typing": "推近“正在输入…”",
+        black: "切黑"
+    }
+};

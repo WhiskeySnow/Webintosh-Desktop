@@ -11,5 +11,6 @@ import autopilot from "./07-autopilot.js";
 import miaAgain from "./08-mia-again.js";
 import cantQuit from "./09-cant-quit.js";
 import days from "./10-days.js";
+import passItOn from "./11-pass-it-on.js";
 
-export const scenes = [coldOpen, mia, install, questions, observation, responsibility, handover, autopilot, miaAgain, cantQuit, days];
+export const scenes = [coldOpen, mia, install, questions, observation, responsibility, handover, autopilot, miaAgain, cantQuit, days, passItOn];
