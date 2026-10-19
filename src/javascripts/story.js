@@ -25,9 +25,9 @@ appMenu["VOLI"] = ["File", "Edit", "View", "Window", "Help"];
 const ambientDesktopItems = [
     { name: "Time-Based Media", icon: "./assets/images/Folder.png" },
     { name: "Screenshots", icon: "./assets/images/Folder.png" },
-    { name: "midterm proposal.docx", icon: "./assets/images/GenericDocumentIcon.png" },
-    { name: "week 5 notes.txt", icon: "./assets/images/document.blue.svg" },
-    { name: "audio ideas.m4a", icon: "./assets/images/GenericDocumentIcon.png" }
+    { name: "midterm proposal.docx", icon: "./assets/images/document-word.svg" },
+    { name: "week 5 notes.txt", icon: "./assets/images/document-text.svg" },
+    { name: "audio ideas.m4a", icon: "./assets/images/document-audio.svg" }
 ];
 
 function dressDesktop() {
