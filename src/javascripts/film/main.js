@@ -7,6 +7,8 @@ import { Timeline } from "./clock.js";
 import { createWorld } from "./world.js";
 import { mountStage } from "./stage.js";
 import { createDirector } from "./director.js";
+import { createSound } from "./sound.js";
+import { manifest } from "./data/manifest.js";
 import { SCENES, TIMELINE } from "./data/story.js";
 import { scenes } from "./scenes/index.js";
 import { devScenes } from "./scenes/dev.js";
@@ -20,7 +22,7 @@ const stage = mountStage(document.body);
 const timeline = new Timeline({ rate: Number(params.get("rate") ?? 1) });
 const world = createWorld(TIMELINE[0]);
 const audio = new AudioContext();
-film.audio = undefined;
+const sound = film.sound = createSound({ audio, timeline, film });
 
 function overlay(text, className) {
     const el = document.createElement("div");
@@ -75,10 +77,12 @@ async function boot() {
         gate.remove();
     }
 
+    await sound.load(manifest);
+
     const director = createDirector({
         timeline,
         film,
-        makeCtx: () => ({ timeline, world, stage: stage.el, audio, film })
+        makeCtx: () => ({ timeline, world, stage: stage.el, audio, sound, film })
     });
     if (params.get("debug") === "1") startDebugOverlay(director);
     if (params.has("pause")) watchPause(Number(params.get("pause")));
