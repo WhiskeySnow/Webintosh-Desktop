@@ -1,0 +1,64 @@
+/* VOLI — looks like a built-in macOS pane (direction B). */
+
+#stage[data-appearance="dark"] {
+    --v-bg: #1e1e1e;
+    --v-bar: #262628;
+    --v-text: #fff;
+    --v-sub: rgba(255, 255, 255, .5);
+    --v-card: #2a2a2c;
+    --v-card-edge: rgba(255, 255, 255, .08);
+    --v-row: rgba(255, 255, 255, .75);
+    --v-btn: rgba(255, 255, 255, .16);
+    --v-option: rgba(255, 255, 255, .08);
+}
+
+#stage[data-appearance="light"] {
+    --v-bg: #f5f5f7;
+    --v-bar: #ebebed;
+    --v-text: #1d1d1f;
+    --v-sub: rgba(0, 0, 0, .5);
+    --v-card: #fff;
+    --v-card-edge: rgba(0, 0, 0, .08);
+    --v-row: rgba(0, 0, 0, .78);
+    --v-btn: rgba(0, 0, 0, .07);
+    --v-option: #fff;
+}
+
+.voli { display: flex; flex-direction: column; background: var(--v-bg); color: var(--v-text); }
+.v-bar { height: 52px; flex: none; display: flex; align-items: center; gap: 18px; padding: 0 20px; background: var(--v-bar); border-bottom: .5px solid rgba(0, 0, 0, .5); font-size: 13.5px; font-weight: 600; opacity: .9; }
+
+.voli-body { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 36px 90px 0; text-align: center; }
+.v-icon { width: 68px; height: 68px; }
+.v-icon.small { width: 48px; height: 48px; }
+.v-label { margin: 10px 0 6px; font-size: 13px; color: var(--v-sub); }
+.voli-body h1 { margin: 12px 0 18px; font-size: 26px; font-weight: 600; line-height: 1.25; letter-spacing: -.2px; }
+.v-label + h1 { margin-top: 0; }
+.v-sub { margin: -6px 0 22px; font-size: 15px; color: var(--v-sub); }
+
+.vcard { width: 100%; box-sizing: border-box; padding: 16px 20px; border-radius: 10px; background: var(--v-card); box-shadow: inset 0 0 0 .5px var(--v-card-edge); text-align: left; font-size: 13px; }
+.v-row { display: grid; grid-template-columns: 140px 1fr 50px; align-items: center; gap: 12px; margin: 8px 0; color: var(--v-row); }
+.v-row i { display: block; height: 8px; border-radius: 4px; }
+.v-row i.gray { background: #8e8e93; }
+.v-row i.blue { background: #0a84ff; }
+.v-row span:last-child { text-align: right; }
+.v-cap { margin-top: 8px; font-size: 12px; color: var(--v-sub); }
+
+.v-line { margin: 22px 0 0; font-size: 15px; color: var(--v-text); opacity: 0; transition: opacity .6s ease; }
+.v-line.in { opacity: 1; }
+
+.v-btns { width: 100%; display: flex; justify-content: flex-end; gap: 10px; margin-top: 26px; }
+[data-screen="welcome"] .v-btns, [data-screen="control"] .v-btns { justify-content: center; }
+.v-btn { padding: 4px 14px; border: 0; border-radius: 6px; background: var(--v-btn); color: var(--v-text); font: 13px -apple-system, BlinkMacSystemFont, sans-serif; }
+.v-btn.pri { background: #0a84ff; color: #fff; }
+.v-btn.is-hover { filter: brightness(1.12); }
+
+.v-options { display: flex; gap: 16px; width: 100%; margin-top: 8px; }
+.v-option { flex: 1; height: 84px; border: 0; border-radius: 12px; background: var(--v-option); box-shadow: inset 0 0 0 .5px var(--v-card-edge); color: var(--v-text); font: 500 16px -apple-system, BlinkMacSystemFont, sans-serif; }
+.v-option.is-hover { box-shadow: inset 0 0 0 2px #0a84ff; }
+
+.v-list { padding: 6px 20px; }
+.v-item { display: flex; justify-content: space-between; padding: 11px 0; font-size: 14px; border-bottom: .5px solid var(--v-card-edge); }
+.v-item:last-child { border-bottom: 0; }
+.v-check { color: #0a84ff; }
+.v-accepted { margin-top: 14px; font-size: 12px; color: var(--v-sub); }
+.v-accepted[hidden] { display: none; }

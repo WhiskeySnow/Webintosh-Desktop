@@ -1,5 +1,7 @@
 // Test-only scenes, run with ?dev=<name>. Never part of the film.
 
+import { DAYS } from "../data/story.js";
+
 function inputFixture(stage) {
     stage.insertAdjacentHTML("beforeend", `
         <button id="dev-a" style="position:absolute;left:300px;top:300px;width:160px;height:60px">A</button>
@@ -236,6 +238,58 @@ export const devScenes = {
             messages.link("mia", { from: "them", silent: true });
             messages.typing(true);
             await cursor.moveTo(".link-card", { mode: "machine", offset: { x: -20, y: 70 } });
+        }
+    },
+    "dev-voli": {
+        id: "dev-voli",
+        async run({ ui, film, cursor }) {
+            const { voli, windows } = ui;
+            const results = film.results = {};
+            const body = () => voli.el.querySelector(".voli-body").innerText.replace(/\s+/g, " ");
+            voli.open();
+            windows.focus("voli");
+            voli.show("welcome");
+            results.welcome = body();
+            voli.show("question", { index: 4, prompt: "Would you rather know the truth, or stay comfortable?", options: ["Know the truth", "Stay comfortable"] });
+            results.question = body();
+            results.optionFound = Boolean(voli.option("Stay comfortable"));
+            voli.show("observation");
+            results.observation = body();
+            const line = voli.appendLine("You deleted “I just” twice before Mia texted you.");
+            results.lineAfterCard = line.previousElementSibling?.classList.contains("vcard") === true;
+            results.lineText = line.textContent;
+            voli.show("autopilot");
+            results.autopilot = body();
+            voli.show("control");
+            results.control = body();
+            voli.show("thanks");
+            results.thanks = body();
+            voli.show("daily", { day: DAYS[2] });
+            results.daily = body();
+            await cursor.moveTo(voli.button("Accept All"), { mode: "machine" });
+            await cursor.click({ mode: "machine" });
+            results.acceptedText = voli.el.querySelector(".v-accepted").textContent;
+        }
+    },
+    "dev-voli-view": {
+        id: "dev-voli-view",
+        async run({ ui, world }) {
+            const { voli, windows, shell } = ui;
+            ["Finder", "Safari", "Messages", "Mail", "Calendar", "Stickies"].forEach(app => shell.dock.setRunning(app, true));
+            shell.dock.add("VOLI", "assets/film/icons/voli.svg");
+            shell.dock.setRunning("VOLI", true);
+            const params = new URLSearchParams(location.search);
+            if (params.get("light") === "1") {
+                world.set({ appearance: "light", time: DAYS[2].date, battery: 88 });
+                voli.open();
+                windows.focus("voli");
+                voli.show("daily", { day: DAYS[2] });
+            } else {
+                voli.open();
+                windows.focus("voli");
+                voli.show("observation");
+                voli.appendLine("You deleted “I just” twice before Mia texted you.");
+            }
         }
     },
     "dev-sound": {

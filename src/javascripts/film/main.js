@@ -17,6 +17,7 @@ import { createSafari } from "./ui/safari.js";
 import { createFinder } from "./ui/finder.js";
 import { createStickies } from "./ui/stickies.js";
 import { createMessages } from "./ui/messages.js";
+import { createVoli } from "./ui/voli.js";
 import { manifest } from "./data/manifest.js";
 import { SCENES, TIMELINE } from "./data/story.js";
 import { scenes } from "./scenes/index.js";
@@ -96,7 +97,8 @@ async function boot() {
         finder: createFinder(windows, { timeline }),
         safari: createSafari(windows, { timeline }),
         stickies: createStickies(windows),
-        messages: createMessages(windows, { world, sound })
+        messages: createMessages(windows, { world, sound }),
+        voli: createVoli(windows)
     };
     const cursor = createCursor(stage.el, { timeline, sound });
     const keyboard = createKeyboard({ timeline, sound });
