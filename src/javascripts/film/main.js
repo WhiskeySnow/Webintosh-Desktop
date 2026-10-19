@@ -10,6 +10,9 @@ import { createDirector } from "./director.js";
 import { createSound } from "./sound.js";
 import { createCursor } from "./cursor.js";
 import { createKeyboard } from "./keyboard.js";
+import { createShell } from "./ui/shell.js";
+import { createNotifications } from "./ui/notifications.js";
+import { createWindows } from "./ui/windows.js";
 import { manifest } from "./data/manifest.js";
 import { SCENES, TIMELINE } from "./data/story.js";
 import { scenes } from "./scenes/index.js";
@@ -80,13 +83,15 @@ async function boot() {
     }
 
     await sound.load(manifest);
+    const shell = createShell(stage.el, { world, timeline });
+    const ui = { shell, notifications: createNotifications(stage.el, { sound }), windows: createWindows(stage.el, { shell }) };
     const cursor = createCursor(stage.el, { timeline, sound });
     const keyboard = createKeyboard({ timeline, sound });
 
     const director = createDirector({
         timeline,
         film,
-        makeCtx: () => ({ timeline, world, stage: stage.el, audio, sound, cursor, keyboard, film })
+        makeCtx: () => ({ timeline, world, stage: stage.el, audio, sound, cursor, keyboard, ui, film })
     });
     if (params.get("debug") === "1") startDebugOverlay(director);
     if (params.has("pause")) watchPause(Number(params.get("pause")));

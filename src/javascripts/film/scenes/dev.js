@@ -68,6 +68,56 @@ export const devScenes = {
             results.keySoundsDuringHuman = countSounds(film, /^(key\d|space)$/, mark);
         }
     },
+    "dev-shell": {
+        id: "dev-shell",
+        async run({ ui, world, film, stage }) {
+            const { shell, notifications, windows } = ui;
+            const results = film.results = {};
+            const text = selector => stage.querySelector(selector)?.textContent;
+
+            ["Finder", "Safari", "Messages", "Mail", "Calendar", "Stickies"].forEach(app => shell.dock.setRunning(app, true));
+            shell.dock.setBadge("Mail", 214);
+            shell.desktop.select("unsent.txt", { focused: false });
+
+            results.clockBefore = text(".mb-clock");
+            world.set({ time: new Date(2026, 9, 14, 23, 48) });
+            results.clockAfter = text(".mb-clock");
+            world.set({ time: new Date(2026, 9, 14, 23, 47) });
+            results.battery = text(".mb-battery-text");
+            results.dockDay = [text(".dock-cal-month"), text(".dock-cal-day")];
+            results.mailBadge = text('[data-app="Mail"] .badge');
+            results.names = shell.desktop.names();
+            results.unsentSelection = shell.desktop.icon("unsent.txt").dataset.selection;
+
+            const mark = film.audioLog.length;
+            notifications.show({ app: "Messages", icon: "icons/messages.png", title: "Mia Chen", body: "you need to try this lol" });
+            notifications.show({ app: "Calendar", calendar: { month: "OCT", day: "15" }, title: "TBM Midterm Proposal", body: "Tomorrow · 370 Jay St, Room 410", time: "9:00 AM" });
+            results.firstBannerTitle = text(".nb .nb-title");
+            results.soundsAfterTwo = film.audioLog.length - mark;
+            const silent = notifications.show({ app: "VOLI", icon: "icons/voli.svg", title: "VOLI", body: "silent", silent: true });
+            results.soundsAfterSilent = film.audioLog.length - mark;
+            notifications.dismiss(silent);
+
+            world.set({ appearance: "light" });
+            results.lightAppearance = stage.dataset.appearance;
+            const bg = getComputedStyle(stage.querySelector(".nb")).backgroundColor.match(/\d+/g).map(Number);
+            results.lightBannerLuminance = 0.2126 * bg[0] + 0.7152 * bg[1] + 0.0722 * bg[2];
+            world.set({ appearance: "dark" });
+
+            shell.menubar.showExtra("voli", '<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>');
+            const menu = shell.menubar.openExtraMenu("voli", ["Quit VOLI"]);
+            results.quitItem = Boolean(menu.item("Quit VOLI"));
+            menu.close();
+
+            windows.create({ id: "a", app: "Finder", menus: ["File"], x: 100, y: 100, w: 300, h: 200 });
+            windows.create({ id: "b", app: "Messages", menus: ["File", "Edit"], x: 500, y: 100, w: 300, h: 200 });
+            windows.focus("b");
+            results.windows = windows.snapshot();
+            results.menuApp = text(".mb-app");
+            windows.get("a").close();
+            windows.get("b").close();
+        }
+    },
     "dev-sound": {
         id: "dev-sound",
         async run(ctx) {
