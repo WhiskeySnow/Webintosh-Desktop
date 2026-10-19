@@ -61,3 +61,13 @@ test("freezeAt caps time and holds waits that reach past it", async () => {
     ]);
     assert.equal(outcome, "pending");
 });
+
+test("rebase realigns elapsed time to the scheduled cursor", async () => {
+    const { clock, timeline } = fakeTimeline();
+    timeline.start();
+    await timeline.wait(100);
+    clock.now += 60;
+    assert.ok(timeline.t >= 160);
+    timeline.rebase();
+    assert.equal(timeline.t, 100);
+});

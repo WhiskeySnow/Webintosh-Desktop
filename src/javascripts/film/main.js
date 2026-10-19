@@ -19,11 +19,13 @@ import { createStickies } from "./ui/stickies.js";
 import { createMessages } from "./ui/messages.js";
 import { createVoli } from "./ui/voli.js";
 import { createSystem } from "./ui/system.js";
+import { createGrid } from "./ui/grid.js";
 import { manifest } from "./data/manifest.js";
 import { SCENES, TIMELINE } from "./data/story.js";
 import { scenes } from "./scenes/index.js";
 import { devScenes } from "./scenes/dev.js";
 import { snapshot } from "./scenes/establish.js";
+import { renderThumb } from "./scenes/thumbs.js";
 
 const params = new URLSearchParams(location.search);
 const film = window.__film = { log: [], audioLog: [], overruns: [], errors: [], done: false, frozen: false };
@@ -101,10 +103,17 @@ async function boot() {
         stickies: createStickies(windows),
         messages: createMessages(windows, { world, sound }),
         voli: createVoli(windows),
-        system: createSystem(windows, { sound })
+        system: createSystem(windows, { sound }),
+        grid: createGrid(stage.el, { timeline })
     };
     const cursor = createCursor(stage.el, { timeline, sound });
     const keyboard = createKeyboard({ timeline, sound });
+
+    if (params.has("thumb")) {
+        renderThumb({ timeline, world, stage: stage.el, sound, cursor, keyboard, ui, film }, params.get("thumb"));
+        film.done = true;
+        return;
+    }
 
     const director = createDirector({
         timeline,

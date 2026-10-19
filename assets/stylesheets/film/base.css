@@ -340,3 +340,7 @@ html, body {
 .win.active .tl i:nth-child(1) { background: #ff5f57; }
 .win.active .tl i:nth-child(2) { background: #febc2e; }
 .win.active .tl i:nth-child(3) { background: #28c840; }
+
+/* scene 10: the wall of screens */
+.grid-zoomer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 960px 540px; }
+.grid-tile { position: absolute; width: 1920px; height: 1080px; background: #000 center / cover no-repeat; box-shadow: 0 0 0 10px #0b0b0c, 0 0 0 11px #1c1c1e; }

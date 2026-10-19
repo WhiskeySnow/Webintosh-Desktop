@@ -10,5 +10,6 @@ import handover from "./06-handover.js";
 import autopilot from "./07-autopilot.js";
 import miaAgain from "./08-mia-again.js";
 import cantQuit from "./09-cant-quit.js";
+import days from "./10-days.js";
 
-export const scenes = [coldOpen, mia, install, questions, observation, responsibility, handover, autopilot, miaAgain, cantQuit];
+export const scenes = [coldOpen, mia, install, questions, observation, responsibility, handover, autopilot, miaAgain, cantQuit, days];

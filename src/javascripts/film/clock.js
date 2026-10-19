@@ -31,6 +31,11 @@ export class Timeline {
         return this.scheduled;
     }
 
+    // Re-anchors "now" to the scheduled cursor, e.g. after slow setup work.
+    rebase() {
+        this.startedAt = this.now() - this.scheduled / this.rate;
+    }
+
     freezeAt(ms) {
         this.frozenAt = ms;
     }

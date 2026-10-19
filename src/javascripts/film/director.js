@@ -32,6 +32,9 @@ export function createDirector({ timeline, film, makeCtx }) {
             if (index === 0 && ctx.snapshot) {
                 film.setupSnapshot = ctx.snapshot();
             }
+            if (index === 0) {
+                timeline.rebase();
+            }
             if (world) {
                 ctx.world.set(world);
             }

@@ -6,6 +6,7 @@ export const TRAFFIC_LIGHTS = '<div class="tl"><i></i><i></i><i></i></div>';
 export function createWindows(stage, { shell }) {
     const layer = shell.windowLayer;
     const windows = new Map();
+    const history = [];
     let order = 10;
 
     const api = {
@@ -31,8 +32,11 @@ export function createWindows(stage, { shell }) {
                     el.hidden = true;
                 },
                 close() {
+                    const wasActive = el.classList.contains("active");
                     el.remove();
                     windows.delete(id);
+                    const previous = history.filter(other => other !== id && windows.get(other)?.visible).at(-1);
+                    if (wasActive && previous) api.focus(previous);
                 }
             };
             windows.set(id, win);
@@ -45,6 +49,7 @@ export function createWindows(stage, { shell }) {
                 win.el.classList.toggle("inactive", !active);
             });
             const win = windows.get(id);
+            history.push(id);
             win.show();
             win.el.style.zIndex = String(order++);
             shell.menubar.setApp(win.app, win.menus);
