@@ -171,6 +171,73 @@ export const devScenes = {
             notifications.show({ app: "Messages", icon: "icons/messages.png", title: "Mia Chen", body: "you need to try this lol", silent: true });
         }
     },
+    "dev-messages": {
+        id: "dev-messages",
+        async run({ ui, world, film, stage }) {
+            const { messages, windows } = ui;
+            const results = film.results = {};
+            const text = selector => stage.querySelector(selector)?.textContent.trim();
+            world.set({ time: new Date(2026, 9, 14, 23, 48) });
+            messages.open("mia");
+            windows.focus("messages");
+            results.header = text(".mh-to");
+            results.rows = [...stage.querySelectorAll(".mrow .mrow-name")].map(n => n.textContent.trim());
+            results.miaPinnedCurrent = stage.querySelector('.mpin[data-contact="mia"]').classList.contains("cur");
+            results.danielLabel = messages.listLabel("daniel");
+            results.dadLabel = messages.listLabel("dad");
+
+            const before = stage.querySelectorAll(".bubble").length;
+            ["one", "two", "three"].forEach(t => messages.bubble("mia", { from: "them", text: t, silent: true }));
+            results.tails = [...stage.querySelectorAll(".bubble")].slice(before).map(b => b.classList.contains("tail"));
+
+            const mark = film.audioLog.length;
+            messages.input.value = "send it lol";
+            results.sentText = messages.send().textContent;
+            results.sendSounds = film.audioLog.slice(mark).filter(e => e.id === "send").length;
+            messages.input.value = "quiet";
+            messages.send({ silent: true });
+            results.sendSoundsAfterSilent = film.audioLog.slice(mark).filter(e => e.id === "send").length;
+            messages.receipt("Read 11:48 PM");
+            results.receipt = text(".receipt");
+
+            messages.typing(true);
+            results.typingShown = Boolean(stage.querySelector(".typing"));
+            messages.typing(false);
+            results.typingGone = !stage.querySelector(".typing");
+            messages.link("mia", { from: "them", silent: true });
+            results.linkTitle = text(".link-card .link-title");
+
+            world.set({ time: new Date(2026, 10, 24, 23, 47) });
+            results.danielLabelLater = messages.listLabel("daniel");
+        }
+    },
+    "dev-messages-view": {
+        id: "dev-messages-view",
+        async run({ ui, world, cursor }) {
+            const { messages, windows, safari, shell } = ui;
+            ["Finder", "Safari", "Messages", "Mail", "Calendar", "Stickies"].forEach(app => shell.dock.setRunning(app, true));
+            shell.dock.setBadge("Mail", 214);
+            world.set({ time: new Date(2026, 9, 14, 23, 47), battery: 22 });
+            safari.openDocs();
+            messages.open("mia");
+            windows.focus("messages");
+            const say = (from, text) => messages.bubble("mia", { from, text, silent: true });
+            say("them", "you need to try this lol");
+            messages.input.value = "what is it?";
+            messages.send({ silent: true });
+            say("them", "this weird app i found");
+            say("them", "it asks you random stuff and then guesses what you’re gonna pick");
+            say("them", "it’s lowkey way too accurate 😭");
+            world.set({ time: new Date(2026, 9, 14, 23, 48) });
+            messages.input.value = "send it lol";
+            messages.send({ silent: true });
+            messages.receipt("Read 11:48 PM");
+            world.set({ time: new Date(2026, 9, 14, 23, 49) });
+            messages.link("mia", { from: "them", silent: true });
+            messages.typing(true);
+            await cursor.moveTo(".link-card", { mode: "machine", offset: { x: -20, y: 70 } });
+        }
+    },
     "dev-sound": {
         id: "dev-sound",
         async run(ctx) {
