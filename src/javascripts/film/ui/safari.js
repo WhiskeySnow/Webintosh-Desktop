@@ -53,9 +53,11 @@ export function createSafari(windows, { timeline }) {
     el.querySelector(".gd-typing").textContent = "I just";
 
     const tabs = el.querySelector(".stabs");
+    let tabList = [];
     function setTabs(list, active) {
+        tabList = list;
         tabs.innerHTML = list.map(([color, title], i) =>
-            `<div class="stab${i === active ? " on" : ""}"><span class="fav" style="background:${color}"></span>${title}</div>`).join("");
+            `<div class="stab${i === active ? " on" : ""}" data-hoverable><span class="fav" style="background:${color}"></span>${title}</div>`).join("");
     }
     function showPage(name, address) {
         el.querySelectorAll(".spage").forEach(page => { page.hidden = !page.classList.contains(name); });
@@ -81,6 +83,12 @@ export function createSafari(windows, { timeline }) {
             setTabs([...docsTabs, ["#1d1d1f", "VOLI — How well can an algorithm know you?"]], 3);
             showPage("voli-site", "voli.app");
             win.show();
+        },
+        tab: i => tabs.children[i],
+        selectTab(i) {
+            setTabs(tabList, i);
+            if (tabList[i][1].startsWith("VOLI")) showPage("voli-site", "voli.app");
+            else showPage("docs", "docs.google.com");
         },
         async download(name, ms) {
             const button = el.querySelector(".stool-dl");

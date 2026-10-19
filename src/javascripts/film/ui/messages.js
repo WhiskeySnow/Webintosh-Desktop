@@ -179,7 +179,8 @@ export function createMessages(windows, { world, sound }) {
             open: current,
             counts: Object.fromEntries([...threads].map(([id, items]) => [id, items.length])),
             muted: [...contacts.values()].filter(c => c.muted).map(c => c.id),
-            links: [...threads.values()].flat().filter(item => item.kind === "link").length
+            links: [...threads.values()].flat().filter(item => item.kind === "link").length,
+            lastMine: current ? threads.get(current).filter(item => item.from === "me").at(-1)?.text ?? null : null
         })
     };
 }
