@@ -62,3 +62,6 @@
 .v-check { color: #0a84ff; }
 .v-accepted { margin-top: 14px; font-size: 12px; color: var(--v-sub); }
 .v-accepted[hidden] { display: none; }
+
+.v-spinner { width: 22px; height: 22px; margin: 26px 0 18px; border-radius: 50%; border: 2.5px solid rgba(127, 127, 127, .3); border-top-color: var(--v-text); animation: v-spin .9s linear infinite; }
+@keyframes v-spin { to { transform: rotate(360deg); } }

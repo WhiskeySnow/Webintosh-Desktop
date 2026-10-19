@@ -48,6 +48,7 @@ export function createWindows(stage, { shell }) {
             win.show();
             win.el.style.zIndex = String(order++);
             shell.menubar.setApp(win.app, win.menus);
+            shell.desktop.blurSelection();
         },
         focusDesktop() {
             windows.forEach(win => {

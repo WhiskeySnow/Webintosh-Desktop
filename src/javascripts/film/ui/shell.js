@@ -164,6 +164,11 @@ export function createShell(stage, { world, timeline }) {
                 icons.forEach(icon => delete icon.dataset.selection);
                 icons.get(name).dataset.selection = focused ? "focus" : "blur";
             },
+            blurSelection() {
+                icons.forEach(icon => {
+                    if (icon.dataset.selection === "focus") icon.dataset.selection = "blur";
+                });
+            },
             beginRename(name) {
                 const icon = icons.get(name);
                 icon.dataset.selection = "focus";

@@ -35,6 +35,11 @@ const SCREENS = {
             <div class="v-row"><span>Know the truth</span><i style="width:${Math.round(HOVER.truth / HOVER.stay * 100)}%" class="blue"></i><span>${HOVER.truth} s</span></div>
             <div class="v-cap">Hover time before you chose “Know the truth.”</div>
         </div>`,
+    learning: () => `
+        <img class="v-icon" src="${ICON}">
+        <div class="v-label">Getting to know you</div>
+        <div class="v-spinner"></div>
+        <p class="v-sub">Learning how you decide…</p>`,
     autopilot: () => `
         <img class="v-icon" src="${ICON}">
         <div class="v-label">Deciding is tiring.</div>
