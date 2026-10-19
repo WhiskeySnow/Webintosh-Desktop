@@ -1,110 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>macOS Sequoia</title>
-
-    <link rel="stylesheet" href="./assets/stylesheets/main/main.css" />
-    <link rel="stylesheet" href="./assets/stylesheets/finderbar/finderbar.css" />
-    <link rel="stylesheet" href="./assets/stylesheets/dock/dock.css?v=bottom-fixed" />
-    <link rel="stylesheet" href="./assets/stylesheets/main/desktop.css?v=desktop-grid-3" />
-    <link rel="stylesheet" href="./assets/stylesheets/cursor/cursor.css" />
-    <link rel="stylesheet" href="./assets/stylesheets/ui/ui.css">
+    <title>VOLI</title>
+    <link rel="stylesheet" href="./assets/stylesheets/film/base.css">
 </head>
-
-<body class="cursor-default">
-    <div class="wallpaper"></div>
-    <header class="finderbar" id="finderbar"></header>
-
-    <div class="desktop" id="desktop">
-        <div class="container"></div>
-    </div>
-    <!-- <div>
-        <div class="container">
-            <div class="item">
-                <img />
-                <p>
-            </div>
-            ... (6 items max)
-        </div>
-        ... (8 containers max)
-    </div> -->
-    <div class="tip" id="tip">访达</div>
-    <div class="dockcontainer">
-        <footer class="dock" id="dock"></footer>
-    </div>
-    <!-- <footer>
-        <div class="container" id="container">
-            <img />
-            <div class="light" id="light"></div>
-        </div>
-    </footer> -->
-
-    <!-- Menus -->
-    <div class="menu" menu="logo" style="width: 240px;" nomatchapp="yes">
-        <p onclick="moduleItems.clickMenuItem(this)" cmd="moduleItems.create('./assets/apps/关于本机.html')" target="关于本机">
-            关于本机</p>
-        <hr />
-        <p onclick="moduleItems.clickMenuItem(this)" cmd="moduleItems.create('./assets/apps/系统设置.html')" target="系统设置">
-            系统设置...</p>
-        <p onclick="moduleItems.clickMenuItem(this)">App Store...</p>
-        <hr />
-        <p onclick="moduleItems.clickMenuItem(this)">最近使用的项目</p>
-        <hr />
-        <p onclick="moduleItems.clickMenuItem(this)">强制退出...</p>
-        <hr />
-        <p onclick="moduleItems.clickMenuItem(this)">睡眠</p>
-        <p onclick="moduleItems.clickMenuItem(this)">重新启动...</p>
-        <p onclick="moduleItems.clickMenuItem(this)">关机...</p>
-        <hr />
-        <p onclick="moduleItems.clickMenuItem(this)">锁定屏幕</p>
-        <p onclick="moduleItems.clickMenuItem(this)">退出登录 “CodeCrafter-TL”...</p>
-    </div>
-    <div class="menu" menu="appname" nomatchapp="yes">
-        <p onclick="moduleItems.clickMenuItem(this)">关于访达</p>
-        <hr />
-        <p onclick="moduleItems.clickMenuItem(this)">设置...</p>
-        <hr />
-        <p onclick="moduleItems.clickMenuItem(this)">清倒废纸篓</p>
-        <hr />
-        <p onclick="moduleItems.clickMenuItem(this)">服务</p>
-        <hr />
-        <p onclick="moduleItems.clickMenuItem(this)">隐藏访达</p>
-        <p onclick="moduleItems.clickMenuItem(this)">隐藏其他</p>
-        <p disabled onclick="moduleItems.clickMenuItem(this)">全部显示</p>
-    </div>
-
-    <script type="module" src="./src/javascripts/main.js"></script>
-    <script type="module" src="./src/javascripts/finderbar.js"></script>
-    <script type="module" src="./src/javascripts/dock.js"></script>
-    <script type="module" src="./src/javascripts/desktop.js"></script>
-    <!-- <script type="module" src="./src/javascripts/cursor.js"></script> -->
-    <script type="module" src="./src/javascripts/window.js"></script>
-    <script type="module" src="./src/javascripts/ui/alert.js"></script>
-    <script type="module" src="https://mengobs.github.io/WebSwift/webswift.js"></script>
-    <script type="module" src="./src/javascripts/ui/menu.js"></script>
-    <script type="module" src="./src/javascripts/client.js"></script>
-    <script type="module" src="./src/javascripts/story.js"></script>
-    <script type="module">
-        import { clickMenuItem } from "./src/javascripts/ui/menu.js";
-        import { parentMenuStates, updateMenu } from "./src/javascripts/finderbar.js";
-        import { create, resetWindowListeners } from "./src/javascripts/window.js";
-        import { createNotification } from "./src/javascripts/ui/notification.js";
-        import { createDesktopFile } from "./src/javascripts/ui/contextMenu.js";
-
-        window.moduleItems = {
-            clickMenuItem: clickMenuItem,
-            parentMenuStates: parentMenuStates,
-            create: create,
-            resetWindowListeners: resetWindowListeners,
-            updateMenu: updateMenu,
-            createDesktopFile: createDesktopFile
-        }
-
-
-    </script>
+<body>
+    <script type="module" src="./src/javascripts/film/main.js"></script>
 </body>
-
 </html>
