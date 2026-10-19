@@ -83,6 +83,7 @@
 }
 
 .choice-content {
+    position: relative;
     flex: 1;
 
     display: flex;
@@ -156,6 +157,112 @@
     color: white;
 }
 
+.choice-button:disabled {
+    color: #8e8e93;
+    background: #eeeef2;
+    cursor: default;
+}
+
+.choice-decision-grid {
+    width: min(640px, 100%);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 18px 0 24px;
+}
+
+.choice-decision-card {
+    padding: 25px 14px;
+    border: 1px solid rgba(60, 60, 67, 0.12);
+    border-radius: 14px;
+    background: rgba(118, 118, 128, 0.08);
+    color: #3a3a3c;
+    font-size: 15px;
+    transition: background 320ms ease, border-color 320ms ease, color 320ms ease, transform 320ms ease;
+}
+
+.choice-decision-card.selected {
+    border-color: #0a84ff;
+    background: #0a84ff;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.choice-autopilot-note {
+    min-height: 24px;
+    color: #6e6e73;
+    font-size: 14px;
+}
+
+.choice-now-playing {
+    width: min(420px, 100%);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 10px 0 22px;
+    padding: 14px;
+    border: 1px solid rgba(60, 60, 67, 0.12);
+    border-radius: 14px;
+    background: rgba(118, 118, 128, 0.07);
+    text-align: left;
+}
+
+.choice-album-art {
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #755bea, #ff72a4);
+    color: white;
+    font-size: 24px;
+}
+
+.choice-now-playing strong,
+.choice-now-playing span {
+    display: block;
+}
+
+.choice-now-playing strong {
+    margin-bottom: 4px;
+    color: #1d1d1f;
+    font-size: 15px;
+}
+
+.choice-now-playing span {
+    color: #77777c;
+    font-size: 12px;
+}
+
+.choice-history {
+    width: min(720px, 100%);
+    text-align: left;
+}
+
+.choice-log-row {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    gap: 16px;
+    padding: 9px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    color: rgba(255, 255, 255, 0.88);
+    font-family: "SFMono-Regular", monospace;
+    font-size: 12px;
+}
+
+.choice-log-row time {
+    color: rgba(255, 255, 255, 0.42);
+}
+
+.choice-history-footer {
+    margin-top: 28px;
+    color: white;
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+}
+
 .choice-quote {
     max-width: 650px;
 
@@ -227,4 +334,8 @@
 .choice.window.dark .choice-button.primary {
     background: white;
     color: #111;
+}
+
+.choice.window.dark .choice-history .choice-label {
+    color: rgba(255, 255, 255, 0.42);
 }

@@ -102,6 +102,7 @@ export function createDesktopFile(type, name = "未命名") {
             if (isDragging) {
                 isDragging = false;
                 item.style.zIndex = "0";
+                item.dispatchEvent(new CustomEvent("desktop-item-dropped"));
                 // item.style.cursor = "grab";
             }
         });

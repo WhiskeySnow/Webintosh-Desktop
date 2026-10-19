@@ -1,14 +1,19 @@
-import { create } from "../window.js";
+import { bringToFront, create } from "../window.js";
+import { createNotification } from "../ui/notification.js";
 
-window.choiceStory = window.choiceStory || {
+window.choiceStory = Object.assign({
     installed: false,
     choiceStep: 0,
     messageMode: "mia",
     miaStep: 0,
     deleting: false,
     choiceDesktopItem: null,
-    screen: "welcome"
-};
+    screen: "welcome",
+    answers: {},
+    metrics: {},
+    sessionLog: [],
+    miaFollowupComplete: false
+}, window.choiceStory || {});
 
 const state = window.choiceStory;
 
@@ -67,6 +72,7 @@ win.style.setProperty("left", "50%", "important");
 win.style.setProperty("transform", "translateX(-50%)", "important");
 win.style.setProperty("width", "900px", "important");
 win.style.setProperty("height", "560px", "important");
+bringToFront(win, "信息");
 const sidebar = win.querySelector(".messages-contacts");
 const header = win.querySelector(".messages-header");
 const chat = win.querySelector(".messages-chat");
@@ -296,13 +302,7 @@ function sendMiaLines(lines, callback) {
                 const message = bubble("them", text, link);
 
                 if (link) {
-                    message.addEventListener("click", event => {
-                        event.preventDefault();
-                        event.stopPropagation();
-
-                        state.screen = "installer";
-                        create("./assets/apps/CHOICE.html", "VOLI");
-                    });
+                    message.addEventListener("click", openVoliDownload);
                 }
 
                 index += 1;
@@ -316,6 +316,26 @@ function sendMiaLines(lines, callback) {
 
 function runMiaConversation() {
     bubble("them", "you need to try this lol");
+
+    if (state.miaStep >= 1) {
+        bubble("me", "what is it?");
+        bubble("them", "this weird app i found");
+        bubble("them", "it asks you random stuff and then tries to guess what you're gonna pick");
+        bubble("them", "it’s lowkey way too accurate 😭");
+    }
+
+    if (state.miaStep >= 2) {
+        bubble("me", "send it lol");
+        const downloadLink = bubble("them", "voli.app/download", true);
+        bubble("them", "tell me if it gets you right lol");
+
+        downloadLink.addEventListener("click", openVoliDownload);
+    }
+
+    if (state.messageMode === "mia-followup") {
+        runMiaFollowup();
+        return;
+    }
 
     if (state.miaStep > 0) {
         return;
@@ -341,6 +361,82 @@ function runMiaConversation() {
     });
 }
 
+function openVoliDownload(event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    state.screen = "installer";
+    create("./assets/apps/CHOICE.html", "VOLI");
+
+    setTimeout(() => {
+        const voliWindow = document.getElementById("VOLI");
+        if (voliWindow) {
+            bringVoliToFront(voliWindow);
+        }
+    }, 220);
+}
+
+function bringVoliToFront(voliWindow) {
+    bringToFront(voliWindow, "VOLI");
+}
+
+function runMiaFollowup() {
+    if (state.miaFollowupComplete) {
+        bubble("them", "did it get you right??");
+        bubble("me", "kinda lol this is weird");
+        bubble("them", "wait");
+        bubble("them", "should i delete it lol");
+        bubble("me", "no keep it");
+        return;
+    }
+
+    input.disabled = true;
+    sendButton.disabled = true;
+
+    setTimeout(() => {
+        bubble("them", "did it get you right??");
+        input.disabled = false;
+        sendButton.disabled = false;
+
+        typePresetMessage("kinda lol this is weird", () => {
+            sendMiaLines([
+                "wait",
+                "should i delete it lol"
+            ], () => {
+                input.disabled = true;
+                sendButton.disabled = true;
+
+                setTimeout(() => {
+                    input.disabled = false;
+                    typeAutomatically("no keep it", () => {
+                        setTimeout(() => {
+                            bubble("me", "no keep it");
+                            input.value = "";
+                            input.disabled = true;
+                            state.miaFollowupComplete = true;
+                            state.messageMode = "mia";
+
+                            setTimeout(() => {
+                                createNotification(
+                                    "./assets/icons/CHOICE.svg",
+                                    "VOLI",
+                                    "You would have said the same thing.",
+                                    null,
+                                    "Now"
+                                );
+
+                                window.dispatchEvent(new CustomEvent("voli:messages-complete"));
+                            }, 900);
+                        }, 260);
+                    });
+                }, 850);
+            });
+        });
+    }, 700);
+}
+
 function typeAutomatically(text, callback) {
     input.value = "";
     let character = 0;
@@ -353,7 +449,7 @@ function typeAutomatically(text, callback) {
             clearInterval(timer);
             callback();
         }
-    }, 42);
+    }, 28);
 }
 
 function runDanielEnding() {
@@ -372,9 +468,32 @@ function runDanielEnding() {
     function next() {
         if (index >= lines.length) {
             setTimeout(() => {
-                document.body.style.transition = "filter 1.2s ease";
-                document.body.style.filter = "brightness(0)";
-            }, 900);
+                const indicator = document.createElement("div");
+                indicator.className = "message-bubble them messages-typing-indicator";
+                indicator.innerHTML = "<span></span><span></span><span></span>";
+                chat.appendChild(indicator);
+                chat.scrollTop = chat.scrollHeight;
+
+                setTimeout(() => {
+                    indicator.remove();
+                    bubble("them", "what is it?");
+
+                    setTimeout(() => {
+                        createNotification(
+                            "./assets/icons/CHOICE.svg",
+                            "VOLI",
+                            "You were going to tell someone eventually.",
+                            null,
+                            "Now"
+                        );
+
+                        setTimeout(() => {
+                            document.body.style.transition = "filter 1.4s ease";
+                            document.body.style.filter = "brightness(0)";
+                        }, 1800);
+                    }, 900);
+                }, 1500);
+            }, 700);
             return;
         }
 

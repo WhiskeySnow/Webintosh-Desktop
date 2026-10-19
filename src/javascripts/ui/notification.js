@@ -5,7 +5,8 @@ let newNotificationTime;
 let audio = new Audio("./assets/sounds/alert.ogg");
 
 export function createNotification(icon, title, text, command, time = "刚刚") {
-    audio.play();
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
 
     newNotification = document.createElement("swift-notification");
     newNotification.iconpath = icon;

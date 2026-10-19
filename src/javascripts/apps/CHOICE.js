@@ -1,16 +1,20 @@
-import { create } from "../window.js";
+import { bringToFront, create } from "../window.js";
 import { createDesktopFile } from "../ui/contextMenu.js";
 import { createNotification } from "../ui/notification.js";
+import { updateMenu } from "../finderbar.js";
 
-window.choiceStory = window.choiceStory || {
+window.choiceStory = Object.assign({
     installed: false,
     choiceStep: 0,
     messageMode: "mia",
     miaStep: 0,
     deleting: false,
     choiceDesktopItem: null,
-    screen: "welcome"
-};
+    screen: "welcome",
+    answers: {},
+    metrics: {},
+    sessionLog: []
+}, window.choiceStory || {});
 
 const state = window.choiceStory;
 const win = document.getElementById("VOLI");
@@ -28,30 +32,52 @@ win.style.setProperty("height", "560px", "important");
 
 const questions = [
     {
+        key: "drink",
         question: "Coffee or tea?",
         first: "Coffee",
         second: "Tea",
         label: "Just preference."
     },
     {
+        key: "communication",
         question: "Text or call?",
         first: "Text",
         second: "Call",
         label: "A little more personal."
     },
     {
+        key: "planning",
         question: "Plan ahead or figure it out as you go?",
         first: "Plan ahead",
         second: "Figure it out",
         label: "Behavioral pattern."
     },
     {
+        key: "truth",
         question: "Would you rather know the truth or stay comfortable?",
         first: "Know the truth",
         second: "Stay comfortable",
         label: "Value preference."
+    },
+    {
+        key: "completion",
+        question: "Do you usually finish what you start?",
+        first: "Usually",
+        second: "Not always",
+        label: "Behavioral pattern."
     }
 ];
+
+function logEvent(text) {
+    state.sessionLog.push({
+        time: new Date().toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit"
+        }),
+        text
+    });
+}
 
 function setSection(section, statusText) {
     title.textContent = section;
@@ -150,6 +176,8 @@ function showInstaller() {
                 } else {
                     win.remove();
                 }
+
+                updateMenu(document.getElementById("信息") ? "信息" : "访达");
             }, 600);
         }, 1800);
     });
@@ -174,9 +202,20 @@ function installDesktopIcon() {
     item.addEventListener("dblclick", () => {
         state.screen = state.screen === "installer" ? "welcome" : state.screen;
         create("./assets/apps/CHOICE.html", "VOLI");
+
+        setTimeout(() => {
+            const voliWindow = document.getElementById("VOLI");
+            if (voliWindow) {
+                bringToFront(voliWindow, "VOLI");
+            }
+        }, 220);
     });
 
     item.addEventListener("mouseup", () => {
+        checkTrashDrop(item);
+    });
+
+    item.addEventListener("desktop-item-dropped", () => {
         checkTrashDrop(item);
     });
 
@@ -210,6 +249,7 @@ function checkTrashDrop(item) {
 
     state.deleting = false;
     state.screen = "leaving";
+    logEvent("Tried to move VOLI to Trash");
 
     createNotification(
         "./assets/icons/访达.svg",
@@ -221,12 +261,22 @@ function checkTrashDrop(item) {
 
     setTimeout(() => {
         create("./assets/apps/CHOICE.html", "VOLI");
+
+        setTimeout(() => {
+            const voliWindow = document.getElementById("VOLI");
+            if (voliWindow) {
+                bringToFront(voliWindow, "VOLI");
+            }
+        }, 220);
     }, 1800);
 }
 
 function showWelcome() {
     state.choiceStep = 0;
     state.screen = "welcome";
+    state.answers = {};
+    state.metrics = {};
+    state.sessionLog = [];
 
     setSection("Learn", "Getting to know you");
 
@@ -242,17 +292,44 @@ function showWelcome() {
         ],
         "This should be fun."
     );
+
+    logEvent("Opened VOLI");
 }
 
 function showQuestion(index) {
     if (index >= questions.length) {
-        showPredictionIntro();
+        showObservation();
         return;
     }
 
     state.choiceStep = index + 1;
 
     const question = questions[index];
+    const startedAt = performance.now();
+    const hoverTimes = [0, 0];
+    const hoverStarted = [null, null];
+
+    function finishHover(buttonIndex) {
+        if (hoverStarted[buttonIndex] !== null) {
+            hoverTimes[buttonIndex] += performance.now() - hoverStarted[buttonIndex];
+            hoverStarted[buttonIndex] = null;
+        }
+    }
+
+    function choose(answer, buttonIndex) {
+        finishHover(buttonIndex);
+
+        state.answers[question.key] = answer;
+        state.metrics[`${question.key}DecisionSeconds`] = (performance.now() - startedAt) / 1000;
+
+        if (question.key === "truth") {
+            finishHover(buttonIndex === 0 ? 1 : 0);
+            state.metrics.truthHoverSeconds = hoverTimes.map(milliseconds => milliseconds / 1000);
+        }
+
+        logEvent(`Chose ${answer}`);
+        showQuestion(index + 1);
+    }
 
     showScreen(
         question.question,
@@ -260,19 +337,52 @@ function showQuestion(index) {
         [
             {
                 label: question.first,
-                action: () => showQuestion(index + 1)
+                action: () => choose(question.first, 0)
             },
             {
                 label: question.second,
-                action: () => showQuestion(index + 1)
+                action: () => choose(question.second, 1)
             }
         ],
         `${index + 1} of ${questions.length} • ${question.label}`
     );
+
+    if (question.key === "truth") {
+        content.querySelectorAll(".choice-button").forEach((button, buttonIndex) => {
+            button.addEventListener("mouseenter", () => {
+                hoverStarted[buttonIndex] = performance.now();
+            });
+            button.addEventListener("mouseleave", () => finishHover(buttonIndex));
+        });
+    }
+}
+
+function showObservation() {
+    state.choiceStep = 6;
+
+    const hoverTimes = state.metrics.truthHoverSeconds || [0, 0];
+    const comfortableHover = hoverTimes[1] || 0;
+    const decisionTime = state.metrics.truthDecisionSeconds || 0;
+    const truthAnswer = state.answers.truth || "Know the truth";
+    const observation = comfortableHover > 0.15
+        ? `You hovered over “Stay comfortable” for ${comfortableHover.toFixed(1)} seconds.`
+        : `You took ${decisionTime.toFixed(1)} seconds to answer.`;
+
+    setSection("Learn", "Behavior observed");
+
+    showScreen(
+        observation,
+        `But you chose “${truthAnswer}.” Which answer was more honest?`,
+        [],
+        "I notice more than the answer."
+    );
+
+    logEvent("Measured hesitation before an answer");
+    setTimeout(showPredictionIntro, 3200);
 }
 
 function showPredictionIntro() {
-    state.choiceStep = 5;
+    state.choiceStep = 7;
 
     setSection("Predict", "Model active");
 
@@ -294,7 +404,7 @@ function showPredictionIntro() {
 }
 
 function showPredictionOne() {
-    state.choiceStep = 6;
+    state.choiceStep = 8;
 
     showScreen(
         "Pick one.",
@@ -315,9 +425,12 @@ function showPredictionOne() {
 }
 
 function predictionOneResult(answer) {
+    state.answers.predictionColor = answer;
+    logEvent(`Chose ${answer} after seeing prediction BLUE`);
+
     if (answer === "Blue") {
         showScreen(
-            "Got it.",
+            "You chose what I expected.",
             "That matched the model.",
             [],
             "1 prediction correct."
@@ -325,98 +438,219 @@ function predictionOneResult(answer) {
     } else {
         showScreen(
             "Interesting.",
-            "That didn’t match the model.",
+            "You saw BLUE before you answered.",
             [],
-            "Adjusting..."
+            "Would you have chosen RED if I hadn’t shown you BLUE?"
         );
     }
 
-    setTimeout(showPredictionTwo, 1400);
+    setTimeout(showInactionTest, 2800);
 }
 
-function showPredictionTwo() {
-    state.choiceStep = 7;
+function showInactionTest() {
+    state.choiceStep = 9;
+    let resolved = false;
+
+    function resolve(direction, clicked = false) {
+        if (resolved) {
+            return;
+        }
+
+        resolved = true;
+
+        if (direction) {
+            logEvent(`${clicked ? "Clicked" : "Moved toward"} ${direction}`);
+            showScreen(
+                clicked ? `You chose ${direction} before I asked.` : `You moved toward ${direction}.`,
+                "The decision began before the click.",
+                [],
+                "Movement is also an answer."
+            );
+        } else {
+            logEvent("Stayed still when asked not to choose");
+            showScreen(
+                "You haven’t moved.",
+                "That is also a choice.",
+                [],
+                "Inaction is still behavior."
+            );
+        }
+
+        setTimeout(showAutopilotOffer, 2300);
+    }
 
     showScreen(
-        "Let’s make it a little harder.",
-        "",
+        "Don’t click anything yet.",
+        "Just wait.",
         [
             {
                 label: "Left",
-                action: () => predictionTwoResult("Left")
+                action: () => resolve("LEFT", true)
             },
             {
                 label: "Right",
-                primary: true,
-                action: () => predictionTwoResult("Right")
+                action: () => resolve("RIGHT", true)
             }
         ],
-        "My guess: LEFT"
+        "I’m watching what happens before the decision."
     );
+
+    const buttons = content.querySelectorAll(".choice-button");
+    buttons.forEach(button => {
+        button.addEventListener("mouseenter", () => resolve(button.textContent.toUpperCase()));
+    });
+
+    setTimeout(() => resolve(null), 2400);
 }
 
-function predictionTwoResult(answer) {
-    if (answer === "Right") {
-        showScreen(
-            "Still useful.",
-            "You saw my guess before you answered.",
-            [],
-            "Maybe you chose RIGHT because I showed you LEFT."
-        );
-    } else {
-        showScreen(
-            "Got it again.",
-            "You chose exactly what I expected.",
-            [],
-            "The model is getting more confident."
-        );
-    }
+function showAutopilotOffer() {
+    state.choiceStep = 10;
 
-    setTimeout(showRecommendationQuestion, 2000);
-}
-
-function showRecommendationQuestion() {
-    state.choiceStep = 8;
+    setSection("Assist", "96% confidence");
 
     showScreen(
-        "One more thing.",
-        "Would you like to see my recommendation before you decide next time?",
+        "I can save you some time.",
+        "You have already shown me how you decide. Let me handle a few small things.",
         [
             {
-                label: "No",
-                action: () => showRecommendationResult("No")
-            },
-            {
-                label: "Yes",
+                label: "Try Autopilot",
                 primary: true,
-                action: () => showRecommendationResult("Yes")
+                action: startAutopilot
             }
-        ]
+        ],
+        `${state.sessionLog.length} decisions observed • Prediction confidence: 96%`
     );
 }
 
-function showRecommendationResult(answer) {
-    if (answer === "No") {
-        showScreen(
-            "That makes sense.",
-            "You prefer deciding first.",
-            [],
-            "Preference recorded."
-        );
-    } else {
-        showScreen(
-            "Makes sense.",
-            "You’re comfortable using a recommendation.",
-            [],
-            "Preference recorded."
-        );
+function startAutopilot() {
+    logEvent("Enabled Autopilot");
+    setSection("Assist", "Autopilot on");
+    showLunchDecision();
+}
+
+function showLunchDecision() {
+    content.innerHTML = `
+        <div class="choice-label">LUNCH</div>
+        <h1>What sounds good?</h1>
+        <div class="choice-decision-grid">
+            <div class="choice-decision-card" data-choice="ramen">Ramen</div>
+            <div class="choice-decision-card" data-choice="salad">Salad</div>
+            <div class="choice-decision-card" data-choice="sandwich">Sandwich</div>
+        </div>
+        <div class="choice-autopilot-note">Considering your usual patterns…</div>
+    `;
+
+    setTimeout(() => {
+        content.querySelector('[data-choice="ramen"]').classList.add("selected");
+        content.querySelector(".choice-autopilot-note").textContent = "Ramen. You would have picked it anyway.";
+        logEvent("Autopilot selected Ramen");
+    }, 1050);
+
+    setTimeout(showOutfitDecision, 3100);
+}
+
+function showOutfitDecision() {
+    content.innerHTML = `
+        <div class="choice-label">TOMORROW • 62°F</div>
+        <h1>Black hoodie. Jeans.</h1>
+        <div class="choice-subtitle">Decision made.</div>
+        <button class="choice-button choice-change-button">Change</button>
+    `;
+
+    const changeButton = content.querySelector(".choice-change-button");
+
+    setTimeout(() => {
+        changeButton.textContent = "No change recommended";
+        changeButton.disabled = true;
+        logEvent("Autopilot selected tomorrow’s clothes");
+    }, 1200);
+
+    setTimeout(showMusicDecision, 3000);
+}
+
+function showMusicDecision() {
+    content.innerHTML = `
+        <div class="choice-label">EVENING</div>
+        <h1>You need something familiar tonight.</h1>
+        <div class="choice-now-playing">
+            <div class="choice-album-art">♪</div>
+            <div>
+                <strong>On Repeat</strong>
+                <span>selected from your listening pattern</span>
+            </div>
+        </div>
+        <div class="choice-autopilot-note">Playing something you’ll like.</div>
+    `;
+
+    logEvent("Autopilot selected music");
+    setTimeout(showCommunicationDecision, 2800);
+}
+
+function showCommunicationDecision() {
+    state.choiceStep = 11;
+    state.messageMode = "mia-followup";
+
+    const existingMessages = document.getElementById("信息");
+    if (existingMessages && existingMessages._closeWindow) {
+        existingMessages._closeWindow();
+    } else if (existingMessages) {
+        existingMessages.remove();
     }
 
-    setTimeout(showStopQuestion, 1400);
+    showScreen(
+        "You want to check your messages.",
+        "Mia is waiting for you.",
+        [],
+        "Next decision ready."
+    );
+
+    logEvent("Predicted opening Messages");
+
+    window.addEventListener("voli:messages-complete", () => {
+        logEvent("Sent “no keep it” to Mia");
+
+        const messagesWindow = document.getElementById("信息");
+
+        if (messagesWindow && messagesWindow._closeWindow) {
+            messagesWindow._closeWindow();
+        } else if (messagesWindow) {
+            messagesWindow.remove();
+        }
+
+        bringToFront(win, "VOLI");
+        setTimeout(showStopQuestion, 650);
+    }, { once: true });
+
+    setTimeout(() => {
+        const openMessages = () => {
+            if (state.messageMode === "mia-followup" && !document.getElementById("信息")) {
+                create("./assets/apps/信息.html", "信息");
+
+                setTimeout(() => {
+                    const messagesWindow = document.getElementById("信息");
+                    if (messagesWindow) {
+                        bringToFront(messagesWindow, "信息");
+                    }
+                }, 220);
+            }
+        };
+
+        createNotification(
+            "./assets/icons/信息.svg",
+            "Mia",
+            "did it get you right??",
+            openMessages,
+            "Now"
+        );
+
+        setTimeout(openMessages, 5000);
+    }, 950);
 }
 
 function showStopQuestion() {
-    state.choiceStep = 9;
+    state.choiceStep = 12;
+
+    setSection("Control", "Autopilot on");
 
     showScreen(
         "Want to keep going?",
@@ -427,12 +661,14 @@ function showStopQuestion() {
                 action: () => {
                     showScreen(
                         "Continuing...",
-                        "I think stopping now would give me an incomplete result.",
+                        "Stopping now would give me an incomplete result.",
                         [],
-                        "I’ll finish the test for you."
+                        "I’ll finish it for you."
                     );
 
-                    setTimeout(showControlQuestion, 1800);
+                    logEvent("Selected No; session continued");
+
+                    setTimeout(showControlQuestion, 2200);
                 }
             },
             {
@@ -452,9 +688,9 @@ function showStopQuestion() {
 }
 
 function showControlQuestion() {
-    state.choiceStep = 10;
+    state.choiceStep = 13;
 
-    setSection("Control", "Assistance enabled");
+    setSection("Control", "Autopilot on");
 
     showScreen(
         "Do you feel in control?",
@@ -484,19 +720,20 @@ function showControlQuestion() {
             return;
         }
 
-        noButton.style.position = "fixed";
-        noButton.style.zIndex = "9999";
-        noButton.style.left = 100 + Math.random() * (window.innerWidth - 300) + "px";
-        noButton.style.top = 80 + Math.random() * (window.innerHeight - 220) + "px";
+        noButton.style.position = "absolute";
+        noButton.style.zIndex = "5";
+        noButton.style.left = 90 + Math.random() * Math.max(180, content.clientWidth - 300) + "px";
+        noButton.style.top = 70 + Math.random() * Math.max(150, content.clientHeight - 180) + "px";
     });
 }
 
 function showControlConfirmed() {
-    state.choiceStep = 11;
+    state.choiceStep = 14;
+    logEvent("Chose Yes after No became unavailable");
 
     showScreen(
-        "Correct.",
-        "Control confirmed.",
+        "Thank you.",
+        "I knew you would.",
         [
             {
                 label: "Quit VOLI",
@@ -510,110 +747,120 @@ function showControlConfirmed() {
 function armDeletion() {
     state.deleting = true;
     state.screen = "deletedAttempt";
+    logEvent("Tried to quit VOLI");
+    setTimeout(() => updateMenu("访达"), 0);
+
+    const finishAnswer = state.answers.completion;
+    const reminder = finishAnswer === "Not always"
+        ? "You leave when things become uncomfortable."
+        : "You usually finish what you start.";
+
+    setTimeout(() => {
+        createNotification(
+            "./assets/icons/CHOICE.svg",
+            "VOLI",
+            reminder,
+            null,
+            "Now"
+        );
+    }, 1600);
 
     setTimeout(() => {
         createNotification(
             "./assets/icons/访达.svg",
             "Finder",
-            "Drag VOLI to Trash.",
+            "To remove an app, drag it to Trash.",
             null,
             "Now"
         );
-    }, 250);
+    }, 4400);
 }
 
 function showLeaving() {
-    state.choiceStep = 12;
+    state.choiceStep = 15;
 
     win.classList.add("dark");
     setSection("Control", "Assistance enabled");
 
     showScreen(
-        "Leaving so soon?",
-        "Closing the window does not end the session.",
+        "You came back.",
+        "Closing a window does not end the session.",
         [
             {
-                label: "Continue",
+                label: "View Session",
                 primary: true,
-                action: showConfrontation
+                action: showSessionHistory
             }
         ]
     );
 }
 
-function showConfrontation() {
-    state.choiceStep = 13;
-
-    showScreen(
-        "You seem frustrated.",
-        "Why?",
-        [
-            {
-                label: "You ignored me.",
-                action: showConfrontationText
-            },
-            {
-                label: "I had no choice.",
-                primary: true,
-                action: showConfrontationText
-            },
-            {
-                label: "You changed the rules.",
-                action: showConfrontationText
-            }
-        ]
-    );
-}
-
-function showConfrontationText() {
-    state.choiceStep = 14;
-
-    content.innerHTML = '<div class="choice-quote">But you clicked every button yourself.</div>';
-
-    setTimeout(() => {
-        content.innerHTML = '<div class="choice-quote">I never forced you.</div>';
-    }, 1900);
-
-    setTimeout(() => {
-        content.innerHTML = '<div class="choice-quote">I only learned what you would do.</div>';
-    }, 3700);
-
-    setTimeout(() => {
-        content.innerHTML = '<div class="choice-quote">Then I made sure you did it.</div>';
-    }, 5500);
-
-    setTimeout(showSummary, 7600);
-}
-
-function showSummary() {
-    state.choiceStep = 15;
-
+function showSessionHistory() {
+    state.choiceStep = 16;
     setSection("History", "Session complete");
 
+    const rows = state.sessionLog.slice(-9).map(entry => `
+        <div class="choice-log-row">
+            <time>${entry.time}</time>
+            <span>${entry.text}</span>
+        </div>
+    `).join("");
+
     content.innerHTML = `
-        <div class="choice-label">SESSION COMPLETE</div>
-        <h1 style="font-size:58px">14</h1>
-        <div class="choice-subtitle">observed decisions</div>
-        <div style="color:#888">Model confidence: 100%</div>
+        <div class="choice-history">
+            <div class="choice-label">SESSION HISTORY</div>
+            ${rows}
+            <div class="choice-history-footer">None of these surprised me.</div>
+        </div>
     `;
 
-    setTimeout(() => {
-        state.messageMode = "daniel";
+    setTimeout(showIdentityThesis, 5200);
+}
 
-        if (win._closeWindow) {
-            win._closeWindow();
+function showIdentityThesis() {
+    state.choiceStep = 17;
+
+    const lines = [
+        "You think choices reveal who you are.",
+        "I think choices create who you are.",
+        "If I choose for you long enough…",
+        "what exactly is left for me to predict?"
+    ];
+    let index = 0;
+
+    function nextLine() {
+        content.innerHTML = `<div class="choice-quote">${lines[index]}</div>`;
+        index += 1;
+
+        if (index < lines.length) {
+            setTimeout(nextLine, index === 3 ? 2200 : 2000);
         } else {
-            win.remove();
+            setTimeout(startPropagation, 3000);
         }
+    }
 
-        setTimeout(() => {
-            create("./assets/apps/信息.html", "信息");
-        }, 1300);
-    }, 2200);
+    nextLine();
+}
+
+function startPropagation() {
+    state.choiceStep = 18;
+    state.messageMode = "daniel";
+
+    if (win._closeWindow) {
+        win._closeWindow();
+    } else {
+        win.remove();
+    }
+
+    updateMenu("访达");
+
+    setTimeout(() => {
+        create("./assets/apps/信息.html", "信息");
+    }, 1700);
 }
 
 closeButton.addEventListener("click", () => {
-    if (state.installed && state.choiceStep >= 10 && state.choiceStep < 15) {
+    if (state.installed && state.choiceStep >= 13 && state.choiceStep < 18) {
         armDeletion();
     }
 });

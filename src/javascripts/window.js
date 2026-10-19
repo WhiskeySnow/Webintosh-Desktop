@@ -102,8 +102,7 @@ export function resetWindowListeners(name, light = null) {
     // 关闭窗口
     const closeWindow = () => {
       win.remove();
-      const s = document.querySelector(`script[app="${name}"]`);
-      if (s) s.remove();
+      document.querySelectorAll(`script[app="${name}"]`).forEach(script => script.remove());
       if (light) light.classList.remove("on");
       if (window.appStatus) window.appStatus[name] = false;
     };
