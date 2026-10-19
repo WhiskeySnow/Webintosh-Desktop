@@ -46,3 +46,42 @@ html, body {
     background: rgba(0, 0, 0, .6);
     font-family: ui-monospace, Menlo, monospace;
 }
+
+.film-cursor {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 9000;
+    pointer-events: none;
+    filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .5));
+}
+
+.film-cursor svg {
+    position: absolute;
+    display: none;
+}
+
+.film-cursor-arrow {
+    left: -2px;
+    top: -2px;
+}
+
+.film-cursor-ibeam {
+    left: -5.5px;
+    top: -11px;
+}
+
+.film-cursor[data-shape="arrow"] .film-cursor-arrow,
+.film-cursor[data-shape="ibeam"] .film-cursor-ibeam {
+    display: block;
+}
+
+.film-drag-ghost {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    margin: 0 !important;
+    z-index: 8999;
+    opacity: .55;
+    pointer-events: none;
+}

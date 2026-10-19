@@ -8,6 +8,8 @@ import { createWorld } from "./world.js";
 import { mountStage } from "./stage.js";
 import { createDirector } from "./director.js";
 import { createSound } from "./sound.js";
+import { createCursor } from "./cursor.js";
+import { createKeyboard } from "./keyboard.js";
 import { manifest } from "./data/manifest.js";
 import { SCENES, TIMELINE } from "./data/story.js";
 import { scenes } from "./scenes/index.js";
@@ -78,11 +80,13 @@ async function boot() {
     }
 
     await sound.load(manifest);
+    const cursor = createCursor(stage.el, { timeline, sound });
+    const keyboard = createKeyboard({ timeline, sound });
 
     const director = createDirector({
         timeline,
         film,
-        makeCtx: () => ({ timeline, world, stage: stage.el, audio, sound, film })
+        makeCtx: () => ({ timeline, world, stage: stage.el, audio, sound, cursor, keyboard, film })
     });
     if (params.get("debug") === "1") startDebugOverlay(director);
     if (params.has("pause")) watchPause(Number(params.get("pause")));
