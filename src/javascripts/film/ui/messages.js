@@ -178,7 +178,8 @@ export function createMessages(windows, { world, sound }) {
         snapshot: () => ({
             open: current,
             counts: Object.fromEntries([...threads].map(([id, items]) => [id, items.length])),
-            muted: [...contacts.values()].filter(c => c.muted).map(c => c.id)
+            muted: [...contacts.values()].filter(c => c.muted).map(c => c.id),
+            links: [...threads.values()].flat().filter(item => item.kind === "link").length
         })
     };
 }

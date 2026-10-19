@@ -23,6 +23,7 @@ import { manifest } from "./data/manifest.js";
 import { SCENES, TIMELINE } from "./data/story.js";
 import { scenes } from "./scenes/index.js";
 import { devScenes } from "./scenes/dev.js";
+import { snapshot } from "./scenes/establish.js";
 
 const params = new URLSearchParams(location.search);
 const film = window.__film = { log: [], audioLog: [], overruns: [], errors: [], done: false, frozen: false };
@@ -108,7 +109,11 @@ async function boot() {
     const director = createDirector({
         timeline,
         film,
-        makeCtx: () => ({ timeline, world, stage: stage.el, audio, sound, cursor, keyboard, ui, film })
+        makeCtx: () => {
+            const ctx = { timeline, world, stage: stage.el, audio, sound, cursor, keyboard, ui, film };
+            ctx.snapshot = () => snapshot(ctx);
+            return ctx;
+        }
     });
     if (params.get("debug") === "1") startDebugOverlay(director);
     if (params.has("pause")) watchPause(Number(params.get("pause")));

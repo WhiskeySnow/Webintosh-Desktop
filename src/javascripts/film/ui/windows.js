@@ -49,6 +49,13 @@ export function createWindows(stage, { shell }) {
             win.el.style.zIndex = String(order++);
             shell.menubar.setApp(win.app, win.menus);
         },
+        focusDesktop() {
+            windows.forEach(win => {
+                win.el.classList.remove("active");
+                win.el.classList.add("inactive");
+            });
+            shell.menubar.setApp("Finder", ["File", "Edit", "View", "Go", "Window", "Help"]);
+        },
         get: id => windows.get(id),
         snapshot: () => [...windows.values()].map(win => ({ id: win.id, visible: win.visible, active: win.el.classList.contains("active") }))
     };

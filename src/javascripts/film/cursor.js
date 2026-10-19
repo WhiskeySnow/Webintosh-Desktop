@@ -132,6 +132,9 @@ export function createCursor(stage, { timeline, sound, seed = 1, start = { x: 96
             elementUnder()?.dispatchEvent(new CustomEvent("film-drop", { bubbles: true, detail: { source } }));
             dispatch("mouseup");
         },
+        jump(target, offset) {
+            place(resolve(target, offset));
+        },
         hover: ms => timeline.wait(ms),
         async idle(ms) {
             const base = { ...pos };

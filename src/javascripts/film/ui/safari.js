@@ -90,6 +90,11 @@ export function createSafari(windows, { timeline }) {
             await timeline.animate(ms, p => ring.setAttribute("stroke-dashoffset", String(47.1 * (1 - p))));
             el.querySelector(".dl-pop").hidden = false;
         },
+        markDownloaded(name) {
+            el.querySelector(".stool-dl").hidden = false;
+            el.querySelector(".dl-ring").setAttribute("stroke-dashoffset", "0");
+            el.querySelector(".dl-name").textContent = name;
+        },
         hideDownloads() {
             el.querySelector(".dl-pop").hidden = true;
         }

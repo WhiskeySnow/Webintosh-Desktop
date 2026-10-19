@@ -132,6 +132,8 @@ export function createShell(stage, { world, timeline }) {
                 extras.appendChild(extra);
             },
             extra: id => extras.querySelector(`[data-extra="${id}"]`),
+            extras: () => [...extras.children].map(extra => extra.dataset.extra),
+            app: () => menubar.querySelector(".mb-app").textContent,
             openExtraMenu(id, items) {
                 const anchor = extras.querySelector(`[data-extra="${id}"]`);
                 anchor.classList.add("is-open");
@@ -185,7 +187,11 @@ export function createShell(stage, { world, timeline }) {
                 label.className = "di-label";
                 fitLabel(label, name);
             },
-            names: () => [...desktopLayer.querySelectorAll(".di")].map(icon => icon.dataset.name)
+            names: () => [...desktopLayer.querySelectorAll(".di")].map(icon => icon.dataset.name),
+            selected() {
+                const icon = desktopLayer.querySelector(".di[data-selection]");
+                return icon ? { name: icon.dataset.name, state: icon.dataset.selection } : null;
+            }
         },
         dock: {
             setRunning(app, on) {
@@ -208,7 +214,9 @@ export function createShell(stage, { world, timeline }) {
                 });
                 img.style.transform = "";
             },
-            el: app => dockItems.get(app)
+            el: app => dockItems.get(app),
+            running: () => [...dockItems.values()].filter(item => item.classList.contains("run")).map(item => item.dataset.app),
+            badges: () => Object.fromEntries([...dockItems.values()].filter(item => item.querySelector(".badge")).map(item => [item.dataset.app, item.querySelector(".badge").textContent]))
         }
     };
 }

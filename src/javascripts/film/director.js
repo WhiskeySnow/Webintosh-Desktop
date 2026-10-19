@@ -1,7 +1,7 @@
 // Runs scenes in order against the shared timeline and keeps the beat log
 // that the checks and the Premiere markers are built from.
 
-import { SCENES } from "./data/story.js";
+import { SCENES, TIMELINE } from "./data/story.js";
 
 export function createDirector({ timeline, film, makeCtx }) {
     let current = { scene: null, beat: null };
@@ -12,7 +12,7 @@ export function createDirector({ timeline, film, makeCtx }) {
     }
 
     async function play(entries) {
-        for (const [index, { module, targetMs }] of entries.entries()) {
+        for (const [index, { module, targetMs, world }] of entries.entries()) {
             const sceneStart = timeline.cursor;
             const ctx = {
                 ...makeCtx(module),
@@ -29,12 +29,21 @@ export function createDirector({ timeline, film, makeCtx }) {
             if (index === 0 && module.setup) {
                 await module.setup(ctx);
             }
+            if (index === 0 && ctx.snapshot) {
+                film.setupSnapshot = ctx.snapshot();
+            }
+            if (world) {
+                ctx.world.set(world);
+            }
             ctx.beat("start");
             await module.run(ctx);
             if (targetMs) {
                 await ctx.at(targetMs);
             }
             ctx.beat("end");
+            if (ctx.snapshot) {
+                film.endSnapshot = ctx.snapshot();
+            }
         }
     }
 
@@ -49,9 +58,9 @@ export function createDirector({ timeline, film, makeCtx }) {
             } else if (scene !== null) {
                 const module = scenes[scene];
                 if (!module) throw new Error(`Scene ${scene} is not built yet`);
-                entries = [{ module, targetMs: SCENES[scene].targetMs }];
+                entries = [{ module, targetMs: SCENES[scene].targetMs, world: TIMELINE[scene] }];
             } else {
-                entries = scenes.map((module, i) => ({ module, targetMs: SCENES[i].targetMs }));
+                entries = scenes.map((module, i) => ({ module, targetMs: SCENES[i].targetMs, world: TIMELINE[i] }));
             }
             await play(entries);
             film.done = true;

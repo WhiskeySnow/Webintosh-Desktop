@@ -35,6 +35,7 @@ export function createNotifications(stage, { sound }) {
             banner.remove();
             lastApp = layer.firstElementChild?.dataset.app ?? null;
         },
+        count: () => layer.children.length,
         clear() {
             layer.innerHTML = "";
             lastApp = null;
