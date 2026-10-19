@@ -292,6 +292,63 @@ export const devScenes = {
             }
         }
     },
+    "dev-system": {
+        id: "dev-system",
+        async run({ ui, film }) {
+            const { system } = ui;
+            const results = film.results = {};
+            const text = dialog => dialog.el.innerText.replace(/\s+/g, " ");
+            const labels = dialog => [...dialog.el.querySelectorAll(".alert-btn")].map(b => b.textContent);
+
+            const gate = system.gatekeeper({ app: "VOLI", browser: "Safari", time: "11:49 PM", host: "voli.app" });
+            results.gatekeeper = text(gate);
+            results.gatekeeperButtons = labels(gate);
+            gate.close();
+
+            const prompt = system.accessibilityPrompt("VOLI");
+            results.prompt = text(prompt);
+            results.promptButtons = labels(prompt);
+            prompt.close();
+
+            const trash = system.trashError("VOLI");
+            results.trash = text(trash);
+            results.finderErrorPlayed = film.audioLog.some(e => e.id === "finderError");
+            trash.close();
+
+            system.settings.openAccessibility([
+                { name: "Raycast", icon: "icons/raycast.png", on: true },
+                { name: "zoom.us", icon: "icons/zoom.png", on: true },
+                { name: "VOLI", icon: "icons/voli.svg", on: false }
+            ]);
+            results.rows = [...document.querySelectorAll(".acc-row .acc-name")].map(n => n.textContent);
+            results.settingsTitle = document.querySelector(".set-title").textContent;
+            results.voliOnBefore = system.settings.toggle("VOLI").classList.contains("on");
+            system.settings.setOn("VOLI", true, { sound: "toggle" });
+            results.voliOnAfter = system.settings.toggle("VOLI").classList.contains("on");
+            results.togglePlayed = film.audioLog.some(e => e.id === "toggle");
+        }
+    },
+    "dev-system-view": {
+        id: "dev-system-view",
+        async run({ ui }) {
+            const { system, voli, windows } = ui;
+            voli.open();
+            voli.show("autopilot");
+            windows.focus("voli");
+            const which = new URLSearchParams(location.search).get("which");
+            if (which === "settings") {
+                system.settings.openAccessibility([
+                    { name: "Raycast", icon: "icons/raycast.png", on: true },
+                    { name: "zoom.us", icon: "icons/zoom.png", on: true },
+                    { name: "VOLI", icon: "icons/voli.svg", on: false }
+                ]);
+            } else if (which === "gate") {
+                system.gatekeeper({ app: "VOLI", browser: "Safari", time: "11:49 PM", host: "voli.app" });
+            } else {
+                system.accessibilityPrompt("VOLI");
+            }
+        }
+    },
     "dev-sound": {
         id: "dev-sound",
         async run(ctx) {
