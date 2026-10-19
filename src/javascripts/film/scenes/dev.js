@@ -118,6 +118,59 @@ export const devScenes = {
             windows.get("b").close();
         }
     },
+    "dev-apps": {
+        id: "dev-apps",
+        async run({ ui, film, cursor }) {
+            const { safari, finder, stickies, windows } = ui;
+            const results = film.results = {};
+            finder.openFolder("Time-Based Media");
+            safari.openDocs();
+            stickies.open();
+            windows.focus("safari");
+            results.docText = safari.docText.textContent;
+            results.docParagraph = safari.docText.parentElement.textContent.trim();
+
+            safari.openVoliSite();
+            results.siteHasDownload = safari.downloadButton.textContent === "Download for Mac";
+            results.activeTab = safari.el.querySelector(".stab.on").textContent.trim();
+            results.tabCount = safari.el.querySelectorAll(".stab").length;
+            results.address = safari.el.querySelector(".saddr-text").textContent;
+            await safari.download("VOLI.dmg", 800);
+            results.downloadItem = safari.downloadItem.querySelector(".dl-name").textContent;
+
+            finder.openDmg();
+            results.dmgHasVoli = Boolean(finder.item("VOLI"));
+            results.dmgHasApplications = Boolean(finder.item("Applications"));
+            let dropped = false;
+            finder.item("Applications").addEventListener("film-drop", () => { dropped = true; });
+            await cursor.drag(finder.item("VOLI"), finder.item("Applications"), { mode: "machine" });
+            results.droppedOnApplications = dropped;
+            await finder.copy(600);
+            finder.openApplications();
+            results.appsHaveVoli = Boolean(finder.item("VOLI"));
+
+            stickies.strike(2);
+            results.struck = getComputedStyle(stickies.line(2)).textDecorationLine;
+            const added = stickies.appendLine();
+            results.lastLineIsNew = added === stickies.line(5);
+        }
+    },
+    "dev-desktop": {
+        id: "dev-desktop",
+        async run({ ui }) {
+            const { shell, safari, finder, stickies, windows, notifications } = ui;
+            ["Finder", "Safari", "Messages", "Mail", "Calendar", "Stickies"].forEach(app => shell.dock.setRunning(app, true));
+            shell.dock.setBadge("Mail", 214);
+            shell.dock.setBadge("Messages", 1);
+            shell.desktop.select("unsent.txt", { focused: false });
+            finder.openFolder("Time-Based Media");
+            safari.openDocs();
+            stickies.open();
+            windows.focus("safari");
+            notifications.show({ app: "Calendar", calendar: { month: "OCT", day: "15" }, title: "TBM Midterm Proposal", body: "Tomorrow · 370 Jay St, Room 410", time: "9:00 AM", silent: true });
+            notifications.show({ app: "Messages", icon: "icons/messages.png", title: "Mia Chen", body: "you need to try this lol", silent: true });
+        }
+    },
     "dev-sound": {
         id: "dev-sound",
         async run(ctx) {

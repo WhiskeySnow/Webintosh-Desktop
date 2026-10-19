@@ -13,6 +13,9 @@ import { createKeyboard } from "./keyboard.js";
 import { createShell } from "./ui/shell.js";
 import { createNotifications } from "./ui/notifications.js";
 import { createWindows } from "./ui/windows.js";
+import { createSafari } from "./ui/safari.js";
+import { createFinder } from "./ui/finder.js";
+import { createStickies } from "./ui/stickies.js";
 import { manifest } from "./data/manifest.js";
 import { SCENES, TIMELINE } from "./data/story.js";
 import { scenes } from "./scenes/index.js";
@@ -84,7 +87,15 @@ async function boot() {
 
     await sound.load(manifest);
     const shell = createShell(stage.el, { world, timeline });
-    const ui = { shell, notifications: createNotifications(stage.el, { sound }), windows: createWindows(stage.el, { shell }) };
+    const windows = createWindows(stage.el, { shell });
+    const ui = {
+        shell,
+        windows,
+        notifications: createNotifications(stage.el, { sound }),
+        finder: createFinder(windows, { timeline }),
+        safari: createSafari(windows, { timeline }),
+        stickies: createStickies(windows)
+    };
     const cursor = createCursor(stage.el, { timeline, sound });
     const keyboard = createKeyboard({ timeline, sound });
 
