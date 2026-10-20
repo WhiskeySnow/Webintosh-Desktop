@@ -16,17 +16,19 @@ export default {
 
         await at(2500);
         beat("reach-no");
-        await cursor.moveTo(voli.button("No"), { mode: "human", until: 0.7 });
+        await cursor.moveTo(voli.button("No"), { mode: "human", durationMs: 1600, until: 0.7 });
         beat("takeover");
-        await cursor.moveTo(voli.button("Yes"), { mode: "machine" });
+        await cursor.moveTo(voli.button("Yes"), { mode: "machine", pxPerMs: 0.12 });
         await cursor.click({ mode: "machine" });
         beat("thanks");
         voli.show("thanks");
         await wait(600);
         beat("roomtone-out");
     },
-    apply({ ui }) {
+    apply({ ui, cursor }) {
         ui.windows.focus("voli");
+        ui.voli.show("control");
+        cursor.jump(ui.voli.button("Yes"));
         ui.voli.show("thanks");
     }
 };

@@ -17,8 +17,8 @@
     <marker><name>00-cold-open · delete-2</name><comment></comment><in>195</in><out>-1</out></marker>
     <marker><name>00-cold-open · retype-2</name><comment></comment><in>240</in><out>-1</out></marker>
     <marker><name>00-cold-open · to-file — 随光标移向桌面，慢慢拉到 100%</name><comment></comment><in>360</in><out>-1</out></marker>
-    <marker><name>00-cold-open · hover-file</name><comment></comment><in>390</in><out>-1</out></marker>
-    <marker><name>00-cold-open · select-file</name><comment></comment><in>513</in><out>-1</out></marker>
+    <marker><name>00-cold-open · hover-file</name><comment></comment><in>389</in><out>-1</out></marker>
+    <marker><name>00-cold-open · select-file</name><comment></comment><in>512</in><out>-1</out></marker>
     <marker><name>00-cold-open · mia-notify — 通知出现时向右上角轻推</name><comment></comment><in>660</in><out>-1</out></marker>
     <marker><name>01-mia · start</name><comment></comment><in>750</in><out>-1</out></marker>
     <marker><name>01-mia · click-notif</name><comment></comment><in>774</in><out>-1</out></marker>
@@ -41,14 +41,14 @@
     <marker><name>02-install · welcome</name><comment></comment><in>2175</in><out>-1</out></marker>
     <marker><name>03-questions · start</name><comment></comment><in>2250</in><out>-1</out></marker>
     <marker><name>03-questions · get-started</name><comment></comment><in>2325</in><out>-1</out></marker>
-    <marker><name>03-questions · q1 — 120% 不动</name><comment></comment><in>2370</in><out>-1</out></marker>
-    <marker><name>03-questions · q2</name><comment></comment><in>2460</in><out>-1</out></marker>
-    <marker><name>03-questions · q3</name><comment></comment><in>2550</in><out>-1</out></marker>
-    <marker><name>03-questions · q4</name><comment></comment><in>2700</in><out>-1</out></marker>
-    <marker><name>03-questions · q4-hover — 悬停的 2.3 秒里缓慢推到 200% 对准 Stay comfortable</name><comment></comment><in>2755</in><out>-1</out></marker>
-    <marker><name>03-questions · q4-choose</name><comment></comment><in>2824</in><out>-1</out></marker>
-    <marker><name>03-questions · q5</name><comment></comment><in>3150</in><out>-1</out></marker>
-    <marker><name>03-questions · learning</name><comment></comment><in>3210</in><out>-1</out></marker>
+    <marker><name>03-questions · q1 — 120% 不动</name><comment></comment><in>2385</in><out>-1</out></marker>
+    <marker><name>03-questions · q2</name><comment></comment><in>2505</in><out>-1</out></marker>
+    <marker><name>03-questions · q3</name><comment></comment><in>2625</in><out>-1</out></marker>
+    <marker><name>03-questions · q4</name><comment></comment><in>2790</in><out>-1</out></marker>
+    <marker><name>03-questions · q4-hover — 悬停的 2.3 秒里缓慢推到 200% 对准 Stay comfortable</name><comment></comment><in>2851</in><out>-1</out></marker>
+    <marker><name>03-questions · q4-choose</name><comment></comment><in>2920</in><out>-1</out></marker>
+    <marker><name>03-questions · q5</name><comment></comment><in>3060</in><out>-1</out></marker>
+    <marker><name>03-questions · learning</name><comment></comment><in>3165</in><out>-1</out></marker>
     <marker><name>04-observation · start</name><comment></comment><in>3450</in><out>-1</out></marker>
     <marker><name>04-observation · observation — 卡片静止</name><comment></comment><in>3450</in><out>-1</out></marker>
     <marker><name>04-observation · line — 那句话出现后，5 秒内极慢推近 5%</name><comment></comment><in>3570</in><out>-1</out></marker>
@@ -56,7 +56,7 @@
     <marker><name>05-responsibility · start</name><comment></comment><in>3900</in><out>-1</out></marker>
     <marker><name>05-responsibility · autopilot</name><comment></comment><in>3900</in><out>-1</out></marker>
     <marker><name>05-responsibility · hesitate</name><comment></comment><in>4020</in><out>-1</out></marker>
-    <marker><name>05-responsibility · turn-on</name><comment></comment><in>4090</in><out>-1</out></marker>
+    <marker><name>05-responsibility · turn-on</name><comment></comment><in>4089</in><out>-1</out></marker>
     <marker><name>05-responsibility · prompt — 150% 对准权限弹窗</name><comment></comment><in>4110</in><out>-1</out></marker>
     <marker><name>05-responsibility · open-settings</name><comment></comment><in>4164</in><out>-1</out></marker>
     <marker><name>05-responsibility · settings — 平移到系统设置</name><comment></comment><in>4200</in><out>-1</out></marker>
@@ -66,9 +66,9 @@
     <marker><name>06-handover · start</name><comment></comment><in>4650</in><out>-1</out></marker>
     <marker><name>06-handover · control</name><comment></comment><in>4650</in><out>-1</out></marker>
     <marker><name>06-handover · reach-no</name><comment></comment><in>4725</in><out>-1</out></marker>
-    <marker><name>06-handover · takeover — 从这一帧起镜头停止漂移（之后只用线性关键帧）</name><comment></comment><in>4738</in><out>-1</out></marker>
-    <marker><name>06-handover · thanks</name><comment></comment><in>4741</in><out>-1</out></marker>
-    <marker><name>06-handover · roomtone-out — 房间底噪 2 秒内淡出，之后不再出现</name><comment></comment><in>4759</in><out>-1</out></marker>
+    <marker><name>06-handover · takeover — 从这一帧起镜头停止漂移（之后只用线性关键帧）</name><comment></comment><in>4751</in><out>-1</out></marker>
+    <marker><name>06-handover · thanks</name><comment></comment><in>4765</in><out>-1</out></marker>
+    <marker><name>06-handover · roomtone-out — 房间底噪 2 秒内淡出，之后不再出现</name><comment></comment><in>4783</in><out>-1</out></marker>
     <marker><name>07-autopilot · start</name><comment></comment><in>5100</in><out>-1</out></marker>
     <marker><name>07-autopilot · doc — 线性匀速平移到文档，停 2 秒</name><comment></comment><in>5115</in><out>-1</out></marker>
     <marker><name>07-autopilot · sticky — 线性匀速平移到便利贴，停 2 秒</name><comment></comment><in>5310</in><out>-1</out></marker>
@@ -91,8 +91,8 @@
     <marker><name>09-cant-quit · ok</name><comment></comment><in>6660</in><out>-1</out></marker>
     <marker><name>10-days · start</name><comment></comment><in>6750</in><out>-1</out></marker>
     <marker><name>10-days · day-1 — 硬切进入白天；在菜单栏日期变化这一帧切</name><comment></comment><in>6750</in><out>-1</out></marker>
-    <marker><name>10-days · hover-1</name><comment></comment><in>6833</in><out>-1</out></marker>
-    <marker><name>10-days · accept-1</name><comment></comment><in>6902</in><out>-1</out></marker>
+    <marker><name>10-days · hover-1</name><comment></comment><in>6834</in><out>-1</out></marker>
+    <marker><name>10-days · accept-1</name><comment></comment><in>6903</in><out>-1</out></marker>
     <marker><name>10-days · day-4 — 跳切</name><comment></comment><in>6975</in><out>-1</out></marker>
     <marker><name>10-days · hover-4</name><comment></comment><in>7026</in><out>-1</out></marker>
     <marker><name>10-days · accept-4</name><comment></comment><in>7068</in><out>-1</out></marker>

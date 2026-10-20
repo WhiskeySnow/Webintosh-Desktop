@@ -73,12 +73,16 @@ export default {
         installed(ctx);
     },
     apply(ctx) {
-        const { safari, finder } = ctx.ui;
+        const { safari, finder, windows, system } = ctx.ui;
         safari.openVoliSite();
+        windows.focus("safari");
         safari.markDownloaded("VOLI.dmg");
         finder.openDmg();
         finder.hasVoli = true;
         finder.openApplications();
+        const gate = system.gatekeeper({ app: "VOLI", browser: "Safari", time: "11:49 PM", host: "voli.app" });
+        ctx.cursor.jump(gate.button("Open"));
+        gate.close();
         installed(ctx);
     }
 };

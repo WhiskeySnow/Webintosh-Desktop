@@ -51,8 +51,9 @@ export default {
         await wait(300);
         shell.desktop.endRename();
     },
-    apply({ ui }) {
+    apply({ ui, cursor }) {
         const { safari, stickies, shell, windows } = ui;
+        cursor.jump(shell.desktop.icon(OLD_NAME));
         windows.focus("safari");
         safari.selectTab(0);
         safari.docText.textContent += " let them.";

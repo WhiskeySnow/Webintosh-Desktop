@@ -9,10 +9,12 @@ import { parseArgs } from "node:util";
 import { VOICE_LINES } from "../src/javascripts/film/data/story.js";
 
 const VOICE_DIR = fileURLToPath(new URL("../assets/film/voice/", import.meta.url));
+// 24 kHz raw PCM is available on every ElevenLabs plan (44.1 kHz needs Pro).
+const SAMPLE_RATE = 24000;
 
 export function buildTtsRequest(line, { voiceId, modelId = "eleven_multilingual_v2" }) {
     return {
-        url: `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=pcm_44100`,
+        url: `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=pcm_${SAMPLE_RATE}`,
         body: {
             text: line.text,
             model_id: modelId,
@@ -21,7 +23,7 @@ export function buildTtsRequest(line, { voiceId, modelId = "eleven_multilingual_
     };
 }
 
-export function pcmToWav(pcm, { sampleRate = 44100 } = {}) {
+export function pcmToWav(pcm, { sampleRate = SAMPLE_RATE } = {}) {
     const header = Buffer.alloc(44);
     header.write("RIFF", 0);
     header.writeUInt32LE(36 + pcm.length, 4);

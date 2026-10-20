@@ -71,6 +71,16 @@ function watchPause(pauseMs) {
     check();
 }
 
+// Decode every image on the stage (and the wallpaper) so the first recorded
+// frame of a scene is complete.
+async function preloadImages(root) {
+    const urls = [...root.querySelectorAll(".wallpaper, .grid-tile")]
+        .map(node => /url\("?(.*?)"?\)/.exec(node.style.backgroundImage)?.[1])
+        .filter(Boolean);
+    const images = [...root.querySelectorAll("img"), ...urls.map(url => Object.assign(new Image(), { src: url }))];
+    await Promise.all(images.map(img => img.decode().catch(() => {})));
+}
+
 async function audioAllowed() {
     const delay = new Promise(resolve => setTimeout(() => resolve(false), 500));
     return Promise.race([audio.resume().then(() => true), delay]);
@@ -121,6 +131,7 @@ async function boot() {
         makeCtx: () => {
             const ctx = { timeline, world, stage: stage.el, audio, sound, cursor, keyboard, ui, film };
             ctx.snapshot = () => snapshot(ctx);
+            ctx.preload = () => preloadImages(stage.el);
             return ctx;
         }
     });

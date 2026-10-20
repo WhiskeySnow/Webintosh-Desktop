@@ -31,10 +31,13 @@ export function createCursor(stage, { timeline, sound, seed = 1, start = { x: 96
     el.innerHTML = ARROW + IBEAM;
     stage.appendChild(el);
 
-    const rng = makeRng(seed);
+    let rng = makeRng(seed);
     const pos = { ...start };
     let under = null;
     let hovered = null;
+    let lastMove = 0;
+    let longestStill = 0;
+    let stillAnchor = { ...start };
 
     function viewportPoint() {
         const scale = Number(stage.dataset.scale) || 1;
@@ -48,6 +51,11 @@ export function createCursor(stage, { timeline, sound, seed = 1, start = { x: 96
     }
 
     function place(point) {
+        if (Math.hypot(point.x - stillAnchor.x, point.y - stillAnchor.y) > 0.5) {
+            longestStill = Math.max(longestStill, timeline.t - lastMove);
+            lastMove = timeline.t;
+            stillAnchor = { ...point };
+        }
         pos.x = point.x;
         pos.y = point.y;
         el.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
@@ -84,11 +92,11 @@ export function createCursor(stage, { timeline, sound, seed = 1, start = { x: 96
     const cursor = {
         el,
         pos,
-        async moveTo(target, { mode = "human", durationMs, until = 1, offset } = {}) {
+        async moveTo(target, { mode = "human", durationMs, until = 1, offset, pxPerMs } = {}) {
             const from = { ...pos };
             const to = resolve(target, offset);
             const path = mode === "machine"
-                ? planMachinePath(from, to)
+                ? planMachinePath(from, to, { pxPerMs })
                 : planHumanPath(from, to, { durationMs: durationMs ?? humanDuration(from, to, rng), seed: Math.floor(rng() * 1e9) });
             const total = until >= 1 ? path.at(-1).t : timeAtDistance(path, from, to, until);
             await timeline.animate(total, p => place(samplePath(path, p * total)));
@@ -132,17 +140,34 @@ export function createCursor(stage, { timeline, sound, seed = 1, start = { x: 96
             elementUnder()?.dispatchEvent(new CustomEvent("film-drop", { bubbles: true, detail: { source } }));
             dispatch("mouseup");
         },
+        reseed(next) {
+            rng = makeRng(next);
+        },
+        resetStill() {
+            lastMove = timeline.t;
+            longestStill = 0;
+            stillAnchor = { ...pos };
+        },
+        // Longest stretch (ms) the cursor has not moved since resetStill().
+        longestStill: () => Math.max(longestStill, timeline.t - lastMove),
         jump(target, offset) {
             place(resolve(target, offset));
         },
         hover: ms => timeline.wait(ms),
+        // A resting hand: a slow drift of a few pixels per second that eases in
+        // and out, ending exactly where it began.
         async idle(ms) {
             const base = { ...pos };
             const phase = rng() * Math.PI * 2;
-            await timeline.animate(ms, p => place({
-                x: base.x + 2.5 * Math.sin(phase + p * 3.1) * Math.sin(Math.PI * p),
-                y: base.y + 1.5 * Math.sin(phase * 1.7 + p * 2.3) * Math.sin(Math.PI * p)
-            }));
+            const ramp = Math.min(300, ms / 2);
+            await timeline.animate(ms, p => {
+                const t = p * ms;
+                const envelope = Math.min(1, t / ramp, (ms - t) / ramp);
+                place({
+                    x: base.x + envelope * (2.5 * Math.sin(phase + t / 650) + 1.2 * Math.sin(phase * 2.3 + t / 290)),
+                    y: base.y + envelope * (1.6 * Math.sin(phase * 1.7 + t / 820) + 0.8 * Math.sin(phase * 3.1 + t / 370))
+                });
+            });
         }
     };
     return cursor;

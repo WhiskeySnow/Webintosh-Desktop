@@ -193,10 +193,10 @@ export const devScenes = {
             results.tails = [...stage.querySelectorAll(".bubble")].slice(before).map(b => b.classList.contains("tail"));
 
             const mark = film.audioLog.length;
-            messages.input.value = "send it lol";
+            messages.input.textContent = "send it lol";
             results.sentText = messages.send().textContent;
             results.sendSounds = film.audioLog.slice(mark).filter(e => e.id === "send").length;
-            messages.input.value = "quiet";
+            messages.input.textContent = "quiet";
             messages.send({ silent: true });
             results.sendSoundsAfterSilent = film.audioLog.slice(mark).filter(e => e.id === "send").length;
             messages.receipt("Read 11:48 PM");
@@ -225,13 +225,13 @@ export const devScenes = {
             windows.focus("messages");
             const say = (from, text) => messages.bubble("mia", { from, text, silent: true });
             say("them", "you need to try this lol");
-            messages.input.value = "what is it?";
+            messages.input.textContent = "what is it?";
             messages.send({ silent: true });
             say("them", "this weird app i found");
             say("them", "it asks you random stuff and then guesses what you’re gonna pick");
             say("them", "it’s lowkey way too accurate 😭");
             world.set({ time: new Date(2026, 9, 14, 23, 48) });
-            messages.input.value = "send it lol";
+            messages.input.textContent = "send it lol";
             messages.send({ silent: true });
             messages.receipt("Read 11:48 PM");
             world.set({ time: new Date(2026, 9, 14, 23, 49) });
@@ -347,6 +347,46 @@ export const devScenes = {
             } else {
                 system.accessibilityPrompt("VOLI");
             }
+        }
+    },
+    "dev-voice-overlap": {
+        id: "dev-voice-overlap",
+        async run({ sound, wait }) {
+            sound.play("M2");
+            await wait(200);
+            sound.play("M3");
+            await wait(sound.duration("M3"));
+        }
+    },
+    "dev-voice-cut": {
+        id: "dev-voice-cut",
+        targetMs: 500,
+        async run({ sound }) {
+            sound.play("M3");
+        }
+    },
+    "dev-carets": {
+        id: "dev-carets",
+        async run({ ui, keyboard, film }) {
+            const { messages, windows, safari } = ui;
+            const results = film.results = {};
+            const shown = selector => {
+                const el = document.querySelector(selector);
+                return Boolean(el) && getComputedStyle(el).visibility !== "hidden" && getComputedStyle(el).display !== "none";
+            };
+            safari.openDocs();
+            messages.open("mia");
+            windows.focus("messages");
+            await keyboard.type(messages.input, ["hi"], { mode: "machine" });
+            results.typed = messages.input.textContent;
+            results.messagesCaret = shown("#win-messages .cmp-caret");
+            results.caretSolidWhileTyping = document.querySelector("#win-messages .cmp-caret").classList.contains("solid");
+            results.docsCaretWhenInactive = shown("#win-safari .caret");
+            windows.focus("safari");
+            results.messagesCaretWhenInactive = shown("#win-messages .cmp-caret");
+            results.docsCaretWhenActive = shown("#win-safari .caret");
+            results.sent = messages.send({ silent: true }).textContent;
+            results.emptyAfterSend = messages.input.textContent === "";
         }
     },
     "dev-sound": {

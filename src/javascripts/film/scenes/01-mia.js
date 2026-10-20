@@ -74,15 +74,16 @@ export default {
     },
     apply(ctx) {
         const { messages } = ctx.ui;
+        ctx.cursor.jump(document.querySelector(".nb"));
         openConversation(ctx);
         const say = (from, text) => messages.bubble("mia", { from, text, silent: true });
-        messages.input.value = "what is it?";
+        messages.input.textContent = "what is it?";
         messages.send({ silent: true });
         say("them", "this weird app i found");
         say("them", "it asks you random stuff and then guesses what you’re gonna pick");
         say("them", "it’s lowkey way too accurate 😭");
         ctx.world.set({ time: at(23, 48) });
-        messages.input.value = "send it lol";
+        messages.input.textContent = "send it lol";
         messages.send({ silent: true });
         messages.receipt("Read 11:48 PM");
         messages.link("mia", { from: "them", silent: true });

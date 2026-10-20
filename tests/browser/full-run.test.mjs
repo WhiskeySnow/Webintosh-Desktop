@@ -28,4 +28,17 @@ test("the whole film plays through inside five minutes", { timeout: 300000 }, ()
     }
     const toggles = film.audioLog.filter(e => e.id === "toggle");
     assert.equal(toggles.length, 1, "VOLI's only sound is the Accessibility switch");
+
+    // Scenes are recorded one by one (?scene=N); their beats must land exactly
+    // where the full run (and therefore the Premiere markers) puts them.
+    for (const index of [3, 6, 8]) {
+        const id = film.log.find(e => e.beat === "start" && e.scene.startsWith(String(index).padStart(2, "0"))).scene;
+        const relative = log => {
+            const start = log.find(e => e.scene === id && e.beat === "start").t;
+            return log.filter(e => e.scene === id).map(e => [e.beat, e.t - start]);
+        };
+        const alone = await open(`index.html?scene=${index}&rate=4`);
+        await alone.waitFor("window.__film && (__film.done || __film.errors.length)", 60000);
+        assert.deepEqual(relative(await alone.eval("__film.log")), relative(film.log), `scene ${index} alone vs full run`);
+    }
 }));

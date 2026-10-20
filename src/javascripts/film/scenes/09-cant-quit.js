@@ -46,9 +46,12 @@ export default {
         await cursor.click(human);
         error.close();
     },
-    apply({ ui }) {
+    apply({ ui, cursor }) {
         ui.notifications.clear();
         ui.voli.close();
         ui.finder.openApplications();
+        const error = ui.system.trashError("VOLI", { silent: true });
+        cursor.jump(error.button("OK"));
+        error.close();
     }
 };

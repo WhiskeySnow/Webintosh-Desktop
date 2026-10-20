@@ -5,10 +5,10 @@ import { establish } from "./establish.js";
 
 const FILE = "pros and cons (3).docx";
 
-function miaArrives({ ui }, { silent }) {
+function miaArrives({ ui }, { silent, animate = true }) {
     const { messages, notifications, shell } = ui;
     messages.bubble("mia", { from: "them", text: "you need to try this lol", silent: true });
-    notifications.show({ app: "Messages", icon: "icons/messages.png", title: "Mia Chen", body: "you need to try this lol", silent });
+    notifications.show({ app: "Messages", icon: "icons/messages.png", title: "Mia Chen", body: "you need to try this lol", silent, animate });
     shell.dock.setBadge("Messages", 1);
 }
 
@@ -56,6 +56,7 @@ export default {
     apply(ctx) {
         ctx.ui.shell.desktop.select(FILE, { focused: true });
         ctx.ui.windows.focusDesktop();
-        miaArrives(ctx, { silent: true });
+        ctx.cursor.jump(ctx.ui.shell.desktop.icon(FILE));
+        miaArrives(ctx, { silent: true, animate: false });
     }
 };

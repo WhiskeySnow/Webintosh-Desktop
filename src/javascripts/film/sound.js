@@ -7,6 +7,7 @@ const FADE_S = 0.01;
 export function createSound({ audio, timeline, film, base = "assets/film/" }) {
     const buffers = new Map();
     const texts = new Map();
+    let speaking = null;
 
     async function loadOne(id, path) {
         try {
@@ -38,8 +39,17 @@ export function createSound({ audio, timeline, film, base = "assets/film/" }) {
         },
         duration,
         cutDuration: (id, cutAt) => duration(id) * cutAt,
+        // The voice line still playing at the scheduled time, if any.
+        speaking: () => (speaking && speaking.end > timeline.cursor ? speaking : null),
         play(id, { gain = 1, cutAt } = {}) {
             film.audioLog.push({ t: Math.round(timeline.cursor), id });
+            if (texts.has(id)) {
+                const current = speaking && speaking.end > timeline.cursor ? speaking : null;
+                if (current) {
+                    film.overruns.push({ ...film.current, kind: "voice-overlap", id, ms: Math.round(current.end - timeline.cursor) });
+                }
+                speaking = { id, end: timeline.cursor + (cutAt ? duration(id) * cutAt : duration(id)) };
+            }
             const buffer = buffers.get(id);
             if (!buffer) return;
             const source = audio.createBufferSource();

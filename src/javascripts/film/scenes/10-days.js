@@ -64,13 +64,14 @@ export default {
         await at(33000);
         beat("music-stop");
     },
-    apply({ ui }) {
+    apply({ ui, cursor }) {
         const { shell, messages, notifications, voli, windows } = ui;
         shell.dock.setRunning("Music", true);
         messages.mute("mia");
         voli.open();
         voli.show("daily", { day: DAYS[3] });
         windows.focus("voli");
+        cursor.jump(voli.button("Accept All"));
         voli.close();
         notifications.clear();
     }

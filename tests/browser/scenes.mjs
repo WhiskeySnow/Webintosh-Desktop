@@ -6,7 +6,7 @@ import { SCENES } from "../../src/javascripts/film/data/story.js";
 export async function playScene(open, index, rate = 4) {
     const page = await open(`index.html?scene=${index}&rate=${rate}`);
     await page.waitFor("window.__film && (__film.done || __film.errors.length)", SCENES[index].targetMs / rate + 30000);
-    const film = await page.eval("({ log: __film.log, overruns: __film.overruns, errors: __film.errors, audioLog: __film.audioLog, setup: __film.setupSnapshot, end: __film.endSnapshot, results: __film.results ?? null })");
+    const film = await page.eval("({ log: __film.log, overruns: __film.overruns, errors: __film.errors, audioLog: __film.audioLog, setup: __film.setupSnapshot, end: __film.endSnapshot, results: __film.results ?? null, stillness: __film.stillness ?? null })");
     assert.deepEqual(film.errors, [], `scene ${index} errors`);
     const start = film.log.find(e => e.beat === "start").t;
     const end = film.log.find(e => e.beat === "end").t;

@@ -8,16 +8,23 @@ export function createDirector({ timeline, film, makeCtx }) {
 
     function beat(scene, name) {
         current = { scene, beat: name };
+        film.current = current;
         film.log.push({ scene, beat: name, t: Math.round(timeline.cursor), actual: Math.round(timeline.t) });
     }
 
     async function play(entries) {
-        for (const [index, { module, targetMs, world }] of entries.entries()) {
+        for (const [index, { module, targetMs, world, seed }] of entries.entries()) {
             const sceneStart = timeline.cursor;
             const ctx = {
                 ...makeCtx(module),
                 beat: name => beat(module.id, name),
                 wait: ms => timeline.wait(ms),
+                // Her hand never freezes: drift until the anchor, then hold it.
+                async idleUntil(ms) {
+                    const remaining = sceneStart + ms - timeline.cursor;
+                    if (remaining > 0) await ctx.cursor.idle(remaining);
+                    await ctx.at(ms);
+                },
                 async at(ms) {
                     const target = sceneStart + ms;
                     if (timeline.cursor > target) {
@@ -29,6 +36,9 @@ export function createDirector({ timeline, film, makeCtx }) {
             if (index === 0 && module.setup) {
                 await module.setup(ctx);
             }
+            if (index === 0 && ctx.preload) {
+                await ctx.preload();
+            }
             if (index === 0 && ctx.snapshot) {
                 film.setupSnapshot = ctx.snapshot();
             }
@@ -38,10 +48,22 @@ export function createDirector({ timeline, film, makeCtx }) {
             if (world) {
                 ctx.world.set(world);
             }
+            if (seed !== undefined) {
+                ctx.cursor.reseed(seed);
+                ctx.keyboard.reseed();
+            }
+            ctx.cursor?.resetStill?.();
             ctx.beat("start");
             await module.run(ctx);
             if (targetMs) {
                 await ctx.at(targetMs);
+            }
+            if (ctx.cursor?.longestStill) {
+                film.stillness = { ...film.stillness, [module.id]: Math.round(ctx.cursor.longestStill()) };
+            }
+            const voice = ctx.sound?.speaking();
+            if (voice) {
+                film.overruns.push({ scene: module.id, beat: current.beat, kind: "voice-cut", id: voice.id, ms: Math.round(voice.end - timeline.cursor) });
             }
             ctx.beat("end");
             if (ctx.snapshot) {
@@ -61,9 +83,9 @@ export function createDirector({ timeline, film, makeCtx }) {
             } else if (scene !== null) {
                 const module = scenes[scene];
                 if (!module) throw new Error(`Scene ${scene} is not built yet`);
-                entries = [{ module, targetMs: SCENES[scene].targetMs, world: TIMELINE[scene] }];
+                entries = [{ module, targetMs: SCENES[scene].targetMs, world: TIMELINE[scene], seed: 1000 + scene }];
             } else {
-                entries = scenes.map((module, i) => ({ module, targetMs: SCENES[i].targetMs, world: TIMELINE[i] }));
+                entries = scenes.map((module, i) => ({ module, targetMs: SCENES[i].targetMs, world: TIMELINE[i], seed: 1000 + i }));
             }
             await play(entries);
             film.done = true;

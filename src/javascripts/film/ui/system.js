@@ -83,14 +83,14 @@ export function createSystem(windows, { sound }) {
             buttons: [["Open System Settings", true], ["Deny"]],
             vertical: true
         }),
-        trashError(app) {
+        trashError(app, { silent = false } = {}) {
             const dialog = alert({
                 app: "Finder",
                 icon: "icons/finder.png",
                 title: `The item “${app}” can’t be moved to the Trash because it’s open.`,
                 buttons: [["OK", true]]
             });
-            sound.play("finderError");
+            if (!silent) sound.play("finderError");
             return dialog;
         },
         settings

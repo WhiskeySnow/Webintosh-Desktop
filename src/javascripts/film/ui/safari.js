@@ -51,6 +51,13 @@ export function createSafari(windows, { timeline }) {
     const lead = DOC_TEXT.concept.slice(0, -"I just".length);
     el.querySelector(".gd-lead").textContent = lead;
     el.querySelector(".gd-typing").textContent = "I just";
+    const docCaret = el.querySelector(".caret");
+    let blinkTimer;
+    el.querySelector(".gd-typing").addEventListener("input", () => {
+        docCaret.classList.add("solid");
+        clearTimeout(blinkTimer);
+        blinkTimer = setTimeout(() => docCaret.classList.remove("solid"), 500);
+    });
 
     const tabs = el.querySelector(".stabs");
     let tabList = [];

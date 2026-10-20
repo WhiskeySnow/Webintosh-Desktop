@@ -4,10 +4,10 @@
 import { establish } from "./establish.js";
 import { scenes } from "./index.js";
 
-function miaAsks({ ui }, { silent }) {
+function miaAsks({ ui }, { silent, animate = true }) {
     const { messages, notifications, shell } = ui;
     messages.bubble("mia", { from: "them", text: "did it get you right??", silent: true });
-    notifications.show({ app: "Messages", icon: "icons/messages.png", title: "Mia Chen", body: "did it get you right??", silent });
+    notifications.show({ app: "Messages", icon: "icons/messages.png", title: "Mia Chen", body: "did it get you right??", silent, animate });
     shell.dock.setBadge("Messages", 1);
 }
 
@@ -72,13 +72,14 @@ export default {
     },
     apply(ctx) {
         const { messages } = ctx.ui;
-        miaAsks(ctx, { silent: true });
+        miaAsks(ctx, { silent: true, animate: false });
+        ctx.cursor.jump(document.querySelector(".nb"));
         openMia(ctx);
-        messages.input.value = "kinda this is weird";
+        messages.input.textContent = "kinda this is weird";
         messages.send({ silent: true });
         messages.bubble("mia", { from: "them", text: "wait", silent: true });
         messages.bubble("mia", { from: "them", text: "should i delete it lol", silent: true });
-        messages.input.value = "no keep it";
+        messages.input.textContent = "no keep it";
         messages.send({ silent: true });
     }
 };

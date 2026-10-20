@@ -63,7 +63,8 @@ export function createWindows(stage, { shell }) {
             shell.menubar.setApp("Finder", ["File", "Edit", "View", "Go", "Window", "Help"]);
         },
         get: id => windows.get(id),
-        snapshot: () => [...windows.values()].map(win => ({ id: win.id, visible: win.visible, active: win.el.classList.contains("active") }))
+        snapshot: () => [...windows.values()].map(win => ({ id: win.id, visible: win.visible, active: win.el.classList.contains("active") })),
+        stack: () => [...windows.values()].filter(win => win.visible).sort((a, b) => Number(a.el.style.zIndex) - Number(b.el.style.zIndex)).map(win => win.id)
     };
     return api;
 }

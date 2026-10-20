@@ -13,7 +13,7 @@ const APPS = [
 export default {
     id: "05-responsibility",
     setup: ctx => establish(ctx, 5, scenes),
-    async run({ at, beat, cursor, ui }) {
+    async run({ at, beat, cursor, ui, stage }) {
         const { voli, system, shell } = ui;
         beat("autopilot");
         voli.show("autopilot");
@@ -21,10 +21,16 @@ export default {
 
         await at(4000);
         beat("hesitate");
+        // The gap between the two buttons, in stage pixels (the stage is scaled 2× in OBS).
+        const scale = Number(stage.dataset.scale) || 1;
+        const frame = stage.getBoundingClientRect();
         const notNow = voli.button("Not Now").getBoundingClientRect();
         const turnOn = voli.button("Turn On Autopilot").getBoundingClientRect();
-        const between = { x: (notNow.right - turnOn.left) / 2, y: 0 };
-        await cursor.moveTo(voli.button("Turn On Autopilot"), { mode: "human", offset: { x: between.x - turnOn.width / 2, y: 2 } });
+        const between = {
+            x: ((notNow.right + turnOn.left) / 2 - frame.left) / scale,
+            y: ((turnOn.top + turnOn.bottom) / 2 - frame.top) / scale + 2
+        };
+        await cursor.moveTo(between, { mode: "human" });
         await cursor.hover(1500);
         beat("turn-on");
         await cursor.moveTo(voli.button("Turn On Autopilot"), { mode: "human" });
@@ -57,10 +63,11 @@ export default {
         shell.menubar.showExtra("voli", voli.menuExtraSvg);
         await cursor.hover(8000);
     },
-    apply({ ui }) {
+    apply({ ui, cursor }) {
         const { voli, system, shell } = ui;
         voli.show("autopilot");
         system.settings.openAccessibility(APPS);
+        cursor.jump(system.settings.toggle("VOLI"), { x: -23, y: 0 });
         system.settings.setOn("VOLI", true);
         shell.menubar.showExtra("voli", voli.menuExtraSvg);
     }

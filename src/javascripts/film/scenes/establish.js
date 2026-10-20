@@ -25,13 +25,17 @@ export async function establish(ctx, index, scenes) {
     ctx.world.set(TIMELINE[index]);
 }
 
-export function snapshot({ ui, world }) {
+export function snapshot({ ui, world, cursor, stage }) {
     const { shell, windows, safari, stickies, messages, voli, finder, notifications } = ui;
     const state = world.get();
     return {
         world: { time: state.time.getTime(), battery: state.battery, appearance: state.appearance },
         menuApp: shell.menubar.app(),
         windows: windows.snapshot(),
+        stack: windows.stack(),
+        cursor: { x: Math.round(cursor.pos.x), y: Math.round(cursor.pos.y), shape: cursor.el.dataset.shape },
+        bannersSettled: [...stage.querySelectorAll(".nb")].every(banner => banner.classList.contains("in")),
+        imagesReady: [...stage.querySelectorAll("img")].every(img => img.complete && img.naturalWidth > 0),
         docText: safari.docText.textContent,
         sticky: stickies.lines(),
         desktop: shell.desktop.names(),

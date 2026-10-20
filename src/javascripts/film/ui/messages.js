@@ -34,11 +34,21 @@ export function createMessages(windows, { world, sound }) {
         <div class="mm">
             <div class="mh"><span class="mh-to"></span><span class="mh-icons">${VIDEO}${INFO}</span></div>
             <div class="chat"></div>
-            <div class="cmp"><span class="cmp-plus">+</span><div class="cmp-field"><input class="cmp-input" placeholder="iMessage">${WAVE}</div></div>
+            <div class="cmp"><span class="cmp-plus">+</span><div class="cmp-field empty"><span class="cmp-input"></span><span class="cmp-caret"></span>${WAVE}</div></div>
         </div>`;
 
     const chat = el.querySelector(".chat");
     const input = el.querySelector(".cmp-input");
+    const field = el.querySelector(".cmp-field");
+    const caret = el.querySelector(".cmp-caret");
+    let blinkTimer;
+    // Like macOS: the caret stays solid while keys are pressed, then blinks.
+    input.addEventListener("input", () => {
+        field.classList.toggle("empty", input.textContent === "");
+        caret.classList.add("solid");
+        clearTimeout(blinkTimer);
+        blinkTimer = setTimeout(() => caret.classList.remove("solid"), 500);
+    });
     const contacts = new Map(CONTACTS.map(contact => [contact.id, { ...contact, muted: false }]));
     const threads = new Map(CONTACTS.map(contact => [contact.id, contact.last ? [{ from: "them", text: contact.last.text, time: contact.last.time }] : []]));
     threads.set("mia", MIA_HISTORY.map(item => ({ ...item })));
@@ -147,8 +157,9 @@ export function createMessages(windows, { world, sound }) {
             return add(id, { from, kind: "link", time: world.get().time }, silent);
         },
         send({ silent = false } = {}) {
-            const text = input.value.trim();
-            input.value = "";
+            const text = input.textContent.trim();
+            input.textContent = "";
+            field.classList.add("empty");
             return add(current, { from: "me", text, time: world.get().time }, silent);
         },
         typing(on) {

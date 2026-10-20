@@ -17,6 +17,9 @@ export function createKeyboard({ timeline, sound }) {
     }
 
     return {
+        reseed() {
+            next = 0;
+        },
         async type(target, ops, { mode = "human", voice, cutAt, seed = 1 } = {}) {
             const isField = "value" in target && target.tagName !== "BUTTON";
             const read = () => (isField ? target.value : target.textContent);

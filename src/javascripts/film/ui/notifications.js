@@ -10,7 +10,7 @@ export function createNotifications(stage, { sound }) {
     let lastApp = null;
 
     return {
-        show({ app, icon, calendar, title, body, time = "now", silent = false }) {
+        show({ app, icon, calendar, title, body, time = "now", silent = false, animate = true }) {
             const banner = document.createElement("div");
             banner.className = "nb glass";
             banner.dataset.app = app;
@@ -27,7 +27,8 @@ export function createNotifications(stage, { sound }) {
             }
             layer.prepend(banner);
             lastApp = app;
-            requestAnimationFrame(() => banner.classList.add("in"));
+            if (animate) requestAnimationFrame(() => banner.classList.add("in"));
+            else banner.classList.add("in");
             if (!silent) sound.play(app === "Messages" ? "receive" : "notify");
             return banner;
         },

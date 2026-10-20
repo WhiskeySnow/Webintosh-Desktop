@@ -7,8 +7,8 @@
 | 00:00:06:15 | 00-cold-open · delete-2 |
 | 00:00:08:00 | 00-cold-open · retype-2 |
 | 00:00:12:00 | 00-cold-open · to-file — 随光标移向桌面，慢慢拉到 100% |
-| 00:00:13:00 | 00-cold-open · hover-file |
-| 00:00:17:03 | 00-cold-open · select-file |
+| 00:00:12:29 | 00-cold-open · hover-file |
+| 00:00:17:02 | 00-cold-open · select-file |
 | 00:00:22:00 | 00-cold-open · mia-notify — 通知出现时向右上角轻推 |
 | 00:00:25:00 | 01-mia · start |
 | 00:00:25:24 | 01-mia · click-notif |
@@ -31,14 +31,14 @@
 | 00:01:12:15 | 02-install · welcome |
 | 00:01:15:00 | 03-questions · start |
 | 00:01:17:15 | 03-questions · get-started |
-| 00:01:19:00 | 03-questions · q1 — 120% 不动 |
-| 00:01:22:00 | 03-questions · q2 |
-| 00:01:25:00 | 03-questions · q3 |
-| 00:01:30:00 | 03-questions · q4 |
-| 00:01:31:25 | 03-questions · q4-hover — 悬停的 2.3 秒里缓慢推到 200% 对准 Stay comfortable |
-| 00:01:34:04 | 03-questions · q4-choose |
-| 00:01:45:00 | 03-questions · q5 |
-| 00:01:47:00 | 03-questions · learning |
+| 00:01:19:15 | 03-questions · q1 — 120% 不动 |
+| 00:01:23:15 | 03-questions · q2 |
+| 00:01:27:15 | 03-questions · q3 |
+| 00:01:33:00 | 03-questions · q4 |
+| 00:01:35:01 | 03-questions · q4-hover — 悬停的 2.3 秒里缓慢推到 200% 对准 Stay comfortable |
+| 00:01:37:10 | 03-questions · q4-choose |
+| 00:01:42:00 | 03-questions · q5 |
+| 00:01:45:15 | 03-questions · learning |
 | 00:01:55:00 | 04-observation · start |
 | 00:01:55:00 | 04-observation · observation — 卡片静止 |
 | 00:01:59:00 | 04-observation · line — 那句话出现后，5 秒内极慢推近 5% |
@@ -46,7 +46,7 @@
 | 00:02:10:00 | 05-responsibility · start |
 | 00:02:10:00 | 05-responsibility · autopilot |
 | 00:02:14:00 | 05-responsibility · hesitate |
-| 00:02:16:10 | 05-responsibility · turn-on |
+| 00:02:16:09 | 05-responsibility · turn-on |
 | 00:02:17:00 | 05-responsibility · prompt — 150% 对准权限弹窗 |
 | 00:02:18:24 | 05-responsibility · open-settings |
 | 00:02:20:00 | 05-responsibility · settings — 平移到系统设置 |
@@ -56,9 +56,9 @@
 | 00:02:35:00 | 06-handover · start |
 | 00:02:35:00 | 06-handover · control |
 | 00:02:37:15 | 06-handover · reach-no |
-| 00:02:37:28 | 06-handover · takeover — 从这一帧起镜头停止漂移（之后只用线性关键帧） |
-| 00:02:38:01 | 06-handover · thanks |
-| 00:02:38:19 | 06-handover · roomtone-out — 房间底噪 2 秒内淡出，之后不再出现 |
+| 00:02:38:11 | 06-handover · takeover — 从这一帧起镜头停止漂移（之后只用线性关键帧） |
+| 00:02:38:25 | 06-handover · thanks |
+| 00:02:39:13 | 06-handover · roomtone-out — 房间底噪 2 秒内淡出，之后不再出现 |
 | 00:02:50:00 | 07-autopilot · start |
 | 00:02:50:15 | 07-autopilot · doc — 线性匀速平移到文档，停 2 秒 |
 | 00:02:57:00 | 07-autopilot · sticky — 线性匀速平移到便利贴，停 2 秒 |
@@ -81,8 +81,8 @@
 | 00:03:42:00 | 09-cant-quit · ok |
 | 00:03:45:00 | 10-days · start |
 | 00:03:45:00 | 10-days · day-1 — 硬切进入白天；在菜单栏日期变化这一帧切 |
-| 00:03:47:23 | 10-days · hover-1 |
-| 00:03:50:02 | 10-days · accept-1 |
+| 00:03:47:24 | 10-days · hover-1 |
+| 00:03:50:03 | 10-days · accept-1 |
 | 00:03:52:15 | 10-days · day-4 — 跳切 |
 | 00:03:54:06 | 10-days · hover-4 |
 | 00:03:55:18 | 10-days · accept-4 |
