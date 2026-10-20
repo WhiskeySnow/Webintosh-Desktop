@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xmeml>
+<xmeml version="5">
+  <sequence>
+    <name>VOLI markers</name>
+    <duration>8595</duration>
+    <rate><timebase>30</timebase><ntsc>FALSE</ntsc></rate>
+    <timecode><rate><timebase>30</timebase><ntsc>FALSE</ntsc></rate><string>00:00:00:00</string><frame>0</frame><displayformat>NDF</displayformat></timecode>
+    <media>
+      <video><format><samplecharacteristics><rate><timebase>30</timebase><ntsc>FALSE</ntsc></rate><width>1920</width><height>1080</height><pixelaspectratio>square</pixelaspectratio></samplecharacteristics></format><track/></video>
+      <audio><track/></audio>
+    </media>
+    <marker><name>00-cold-open · start</name><comment></comment><in>0</in><out>-1</out></marker>
+    <marker><name>00-cold-open · hold — 从 130% 对准 “I just” 开始</name><comment></comment><in>0</in><out>-1</out></marker>
+    <marker><name>00-cold-open · delete-1</name><comment></comment><in>45</in><out>-1</out></marker>
+    <marker><name>00-cold-open · retype-1</name><comment></comment><in>102</in><out>-1</out></marker>
+    <marker><name>00-cold-open · delete-2</name><comment></comment><in>195</in><out>-1</out></marker>
+    <marker><name>00-cold-open · retype-2</name><comment></comment><in>240</in><out>-1</out></marker>
+    <marker><name>00-cold-open · to-file — 随光标移向桌面，慢慢拉到 100%</name><comment></comment><in>360</in><out>-1</out></marker>
+    <marker><name>00-cold-open · hover-file</name><comment></comment><in>389</in><out>-1</out></marker>
+    <marker><name>00-cold-open · select-file</name><comment></comment><in>512</in><out>-1</out></marker>
+    <marker><name>00-cold-open · mia-notify — 通知出现时向右上角轻推</name><comment></comment><in>660</in><out>-1</out></marker>
+    <marker><name>01-mia · start</name><comment></comment><in>750</in><out>-1</out></marker>
+    <marker><name>01-mia · click-notif</name><comment></comment><in>774</in><out>-1</out></marker>
+    <marker><name>01-mia · type-what — 推到 160% 对准输入框</name><comment></comment><in>825</in><out>-1</out></marker>
+    <marker><name>01-mia · read-1</name><comment></comment><in>906</in><out>-1</out></marker>
+    <marker><name>01-mia · mia-typing</name><comment></comment><in>930</in><out>-1</out></marker>
+    <marker><name>01-mia · type-send — 推到 160% 对准输入框</name><comment></comment><in>1260</in><out>-1</out></marker>
+    <marker><name>01-mia · read-2</name><comment></comment><in>1335</in><out>-1</out></marker>
+    <marker><name>01-mia · link — 链接卡片出现时拉回 120%</name><comment></comment><in>1380</in><out>-1</out></marker>
+    <marker><name>01-mia · tell-me</name><comment></comment><in>1470</in><out>-1</out></marker>
+    <marker><name>02-install · start</name><comment></comment><in>1650</in><out>-1</out></marker>
+    <marker><name>02-install · click-link</name><comment></comment><in>1665</in><out>-1</out></marker>
+    <marker><name>02-install · site</name><comment></comment><in>1710</in><out>-1</out></marker>
+    <marker><name>02-install · download — 140% 跟着下载 → Finder</name><comment></comment><in>1770</in><out>-1</out></marker>
+    <marker><name>02-install · open-dmg</name><comment></comment><in>1875</in><out>-1</out></marker>
+    <marker><name>02-install · drag</name><comment></comment><in>1920</in><out>-1</out></marker>
+    <marker><name>02-install · launch</name><comment></comment><in>2010</in><out>-1</out></marker>
+    <marker><name>02-install · gatekeeper — 安全警告居中 150%</name><comment></comment><in>2055</in><out>-1</out></marker>
+    <marker><name>02-install · dock-bounce</name><comment></comment><in>2115</in><out>-1</out></marker>
+    <marker><name>02-install · welcome</name><comment></comment><in>2175</in><out>-1</out></marker>
+    <marker><name>03-questions · start</name><comment></comment><in>2250</in><out>-1</out></marker>
+    <marker><name>03-questions · get-started</name><comment></comment><in>2325</in><out>-1</out></marker>
+    <marker><name>03-questions · q1 — 120% 不动</name><comment></comment><in>2385</in><out>-1</out></marker>
+    <marker><name>03-questions · q2</name><comment></comment><in>2505</in><out>-1</out></marker>
+    <marker><name>03-questions · q3</name><comment></comment><in>2625</in><out>-1</out></marker>
+    <marker><name>03-questions · q4</name><comment></comment><in>2790</in><out>-1</out></marker>
+    <marker><name>03-questions · q4-hover — 悬停的 2.3 秒里缓慢推到 200% 对准 Stay comfortable</name><comment></comment><in>2851</in><out>-1</out></marker>
+    <marker><name>03-questions · q4-choose</name><comment></comment><in>2920</in><out>-1</out></marker>
+    <marker><name>03-questions · q5</name><comment></comment><in>3060</in><out>-1</out></marker>
+    <marker><name>03-questions · learning</name><comment></comment><in>3165</in><out>-1</out></marker>
+    <marker><name>04-observation · start</name><comment></comment><in>3450</in><out>-1</out></marker>
+    <marker><name>04-observation · observation — 卡片静止</name><comment></comment><in>3450</in><out>-1</out></marker>
+    <marker><name>04-observation · line — 那句话出现后，5 秒内极慢推近 5%</name><comment></comment><in>3570</in><out>-1</out></marker>
+    <marker><name>04-observation · silence — 低频嗡鸣进入</name><comment></comment><in>3588</in><out>-1</out></marker>
+    <marker><name>05-responsibility · start</name><comment></comment><in>3900</in><out>-1</out></marker>
+    <marker><name>05-responsibility · autopilot</name><comment></comment><in>3900</in><out>-1</out></marker>
+    <marker><name>05-responsibility · hesitate</name><comment></comment><in>4020</in><out>-1</out></marker>
+    <marker><name>05-responsibility · turn-on</name><comment></comment><in>4089</in><out>-1</out></marker>
+    <marker><name>05-responsibility · prompt — 150% 对准权限弹窗</name><comment></comment><in>4110</in><out>-1</out></marker>
+    <marker><name>05-responsibility · open-settings</name><comment></comment><in>4164</in><out>-1</out></marker>
+    <marker><name>05-responsibility · settings — 平移到系统设置</name><comment></comment><in>4200</in><out>-1</out></marker>
+    <marker><name>05-responsibility · stop-short — 200% 对准开关</name><comment></comment><in>4290</in><out>-1</out></marker>
+    <marker><name>05-responsibility · toggle</name><comment></comment><in>4332</in><out>-1</out></marker>
+    <marker><name>05-responsibility · menu-extra</name><comment></comment><in>4380</in><out>-1</out></marker>
+    <marker><name>06-handover · start</name><comment></comment><in>4650</in><out>-1</out></marker>
+    <marker><name>06-handover · control</name><comment></comment><in>4650</in><out>-1</out></marker>
+    <marker><name>06-handover · reach-no</name><comment></comment><in>4725</in><out>-1</out></marker>
+    <marker><name>06-handover · takeover — 从这一帧起镜头停止漂移（之后只用线性关键帧）</name><comment></comment><in>4751</in><out>-1</out></marker>
+    <marker><name>06-handover · thanks</name><comment></comment><in>4765</in><out>-1</out></marker>
+    <marker><name>06-handover · roomtone-out — 房间底噪 2 秒内淡出，之后不再出现</name><comment></comment><in>4783</in><out>-1</out></marker>
+    <marker><name>07-autopilot · start</name><comment></comment><in>5100</in><out>-1</out></marker>
+    <marker><name>07-autopilot · doc — 线性匀速平移到文档，停 2 秒</name><comment></comment><in>5115</in><out>-1</out></marker>
+    <marker><name>07-autopilot · sticky — 线性匀速平移到便利贴，停 2 秒</name><comment></comment><in>5310</in><out>-1</out></marker>
+    <marker><name>07-autopilot · rename — 线性匀速平移到文件名，停 2 秒</name><comment></comment><in>5505</in><out>-1</out></marker>
+    <marker><name>08-mia-again · start</name><comment></comment><in>5700</in><out>-1</out></marker>
+    <marker><name>08-mia-again · mia-notify</name><comment></comment><in>5700</in><out>-1</out></marker>
+    <marker><name>08-mia-again · open</name><comment></comment><in>5745</in><out>-1</out></marker>
+    <marker><name>08-mia-again · type-kinda</name><comment></comment><in>5790</in><out>-1</out></marker>
+    <marker><name>08-mia-again · wait</name><comment></comment><in>5910</in><out>-1</out></marker>
+    <marker><name>08-mia-again · delete-q</name><comment></comment><in>5964</in><out>-1</out></marker>
+    <marker><name>08-mia-again · yeah-delete — 200% 对准 Messages 输入框</name><comment></comment><in>6045</in><out>-1</out></marker>
+    <marker><name>08-mia-again · erase — 停在字被逐个删掉的过程上</name><comment></comment><in>6114</in><out>-1</out></marker>
+    <marker><name>08-mia-again · same-thing</name><comment></comment><in>6210</in><out>-1</out></marker>
+    <marker><name>09-cant-quit · start — 回到 100%，漂移恢复</name><comment></comment><in>6300</in><out>-1</out></marker>
+    <marker><name>09-cant-quit · extra-menu</name><comment></comment><in>6315</in><out>-1</out></marker>
+    <marker><name>09-cant-quit · quit</name><comment></comment><in>6360</in><out>-1</out></marker>
+    <marker><name>09-cant-quit · apps</name><comment></comment><in>6435</in><out>-1</out></marker>
+    <marker><name>09-cant-quit · drag-trash</name><comment></comment><in>6495</in><out>-1</out></marker>
+    <marker><name>09-cant-quit · error</name><comment></comment><in>6585</in><out>-1</out></marker>
+    <marker><name>09-cant-quit · ok</name><comment></comment><in>6660</in><out>-1</out></marker>
+    <marker><name>10-days · start</name><comment></comment><in>6750</in><out>-1</out></marker>
+    <marker><name>10-days · day-1 — 硬切进入白天；在菜单栏日期变化这一帧切</name><comment></comment><in>6750</in><out>-1</out></marker>
+    <marker><name>10-days · hover-1</name><comment></comment><in>6834</in><out>-1</out></marker>
+    <marker><name>10-days · accept-1</name><comment></comment><in>6903</in><out>-1</out></marker>
+    <marker><name>10-days · day-4 — 跳切</name><comment></comment><in>6975</in><out>-1</out></marker>
+    <marker><name>10-days · hover-4</name><comment></comment><in>7026</in><out>-1</out></marker>
+    <marker><name>10-days · accept-4</name><comment></comment><in>7068</in><out>-1</out></marker>
+    <marker><name>10-days · day-9 — 跳切</name><comment></comment><in>7155</in><out>-1</out></marker>
+    <marker><name>10-days · hover-9</name><comment></comment><in>7198</in><out>-1</out></marker>
+    <marker><name>10-days · accept-9</name><comment></comment><in>7216</in><out>-1</out></marker>
+    <marker><name>10-days · day-23 — 跳切</name><comment></comment><in>7305</in><out>-1</out></marker>
+    <marker><name>10-days · hover-23</name><comment></comment><in>7342</in><out>-1</out></marker>
+    <marker><name>10-days · accept-23</name><comment></comment><in>7348</in><out>-1</out></marker>
+    <marker><name>10-days · day-40 — 跳切</name><comment></comment><in>7425</in><out>-1</out></marker>
+    <marker><name>10-days · grid — 拉远由网页渲染，Premiere 只加少量运动模糊</name><comment></comment><in>7500</in><out>-1</out></marker>
+    <marker><name>10-days · music-stop — 音乐戛然而止，静止 2 秒</name><comment></comment><in>7740</in><out>-1</out></marker>
+    <marker><name>11-pass-it-on · start — 硬切回深夜</name><comment></comment><in>7800</in><out>-1</out></marker>
+    <marker><name>11-pass-it-on · messages-open — 100% 看 Messages 自己打字</name><comment></comment><in>7845</in><out>-1</out></marker>
+    <marker><name>11-pass-it-on · type</name><comment></comment><in>7890</in><out>-1</out></marker>
+    <marker><name>11-pass-it-on · link</name><comment></comment><in>8055</in><out>-1</out></marker>
+    <marker><name>11-pass-it-on · daniel-typing — 推近“正在输入…”</name><comment></comment><in>8190</in><out>-1</out></marker>
+    <marker><name>11-pass-it-on · black — 切黑</name><comment></comment><in>8370</in><out>-1</out></marker>
+    <marker><name>11-pass-it-on · final-notify</name><comment></comment><in>8445</in><out>-1</out></marker>
+  </sequence>
+</xmeml>

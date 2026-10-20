@@ -1,0 +1,237 @@
+<!doctype html><html><head><meta charset="utf-8"><title>desktop.html</title><style>
+  .v2wrap { position: relative; width: 100%; overflow: hidden; border-radius: 10px; background: #000; }
+  .v2wrap:fullscreen { border-radius: 0; }
+  .v2 { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; color: #fff;
+    background: url(assets/v2-wall.jpg) center / cover; }
+  .glass { backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); }
+
+  /* menu bar */
+  .mb { position: absolute; inset: 0 0 auto 0; height: 25px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px 0 18px;
+    background: rgba(18, 20, 30, .32); font-size: 13.5px; letter-spacing: -.1px; z-index: 50; }
+  .mb .l { display: flex; gap: 21px; align-items: center; } .mb .l .apple { font-size: 16px; margin-right: 2px; } .mb .l b { font-weight: 700; }
+  .mb .r { display: flex; gap: 17px; align-items: center; } .mb svg { display: block; }
+
+  /* desktop icons */
+  .di { position: absolute; width: 104px; text-align: center; font-size: 12px; line-height: 15px; }
+  .di .ic { height: 68px; display: flex; align-items: flex-end; justify-content: center; margin: 0 auto 4px; width: 76px; border-radius: 5px; }
+  .di .ic img { max-width: 64px; max-height: 64px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.45)); }
+  .di .ic img.page { box-shadow: 0 0 0 .5px rgba(0,0,0,.25); }
+  .di span { display: inline; padding: 1px 4px; border-radius: 3px; text-shadow: 0 1px 2px rgba(0,0,0,.9), 0 0 6px rgba(0,0,0,.5);
+    -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .di.sel .ic { background: rgba(255,255,255,.14); } .di.sel span { background: rgba(110,110,116,.85); text-shadow: none; }
+
+  /* windows */
+  .win { position: absolute; border-radius: 10px; overflow: hidden; }
+  .win.active { box-shadow: 0 0 0 .5px rgba(0,0,0,.85), inset 0 0 0 .5px rgba(255,255,255,.16), 0 30px 90px rgba(0,0,0,.6), 0 10px 24px rgba(0,0,0,.35); }
+  .win.inactive { box-shadow: 0 0 0 .5px rgba(0,0,0,.7), inset 0 0 0 .5px rgba(255,255,255,.1), 0 14px 40px rgba(0,0,0,.38); }
+  .tl { display: flex; gap: 8px; } .tl i { width: 12px; height: 12px; border-radius: 50%; display: block; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.25); }
+  .tl.on i:nth-child(1) { background: #ff5f57; } .tl.on i:nth-child(2) { background: #febc2e; } .tl.on i:nth-child(3) { background: #28c840; }
+  .tl.off i { background: #48484c; box-shadow: inset 0 0 0 .5px rgba(255,255,255,.12); }
+
+  /* Finder (inactive, behind) */
+  .finder { left: 64px; top: 70px; width: 860px; height: 540px; background: #1e1e1f; display: flex; }
+  .fside { width: 200px; background: rgba(46,46,50,.78); padding: 14px 10px; font-size: 13px; color: rgba(255,255,255,.62); }
+  .fside .h { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.32); margin: 18px 6px 6px; }
+  .fside div.it { padding: 4px 8px; border-radius: 6px; display: flex; gap: 8px; align-items: center; } .fside .it.cur { background: rgba(255,255,255,.08); }
+  .fside .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .fmain { flex: 1; } .ftool { height: 52px; background: #262628; border-bottom: .5px solid #000; display: flex; align-items: center; padding: 0 16px; gap: 14px; font-size: 14px; font-weight: 600; color: rgba(255,255,255,.55); }
+  .fgrid { display: grid; grid-template-columns: repeat(5, 110px); gap: 18px 10px; padding: 22px; font-size: 12px; color: rgba(255,255,255,.7); text-align: center; }
+  .fgrid img { width: 58px; height: 58px; object-fit: contain; display: block; margin: 0 auto 4px; opacity: .9; }
+
+  /* Safari (active, front) */
+  .safari { left: 330px; top: 116px; width: 1080px; height: 770px; background: #fff; display: flex; flex-direction: column; }
+  .stool { height: 52px; background: #333336; display: flex; align-items: center; padding: 0 16px; gap: 18px; color: rgba(255,255,255,.7); }
+  .saddr { flex: 1; margin: 0 120px 0 70px; height: 30px; border-radius: 8px; background: #1f1f21; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13.5px; color: #e8e8ea; }
+  .stabs { height: 30px; background: #252527; display: flex; border-bottom: .5px solid #000; font-size: 12px; color: rgba(255,255,255,.55); }
+  .stabs div { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; border-right: .5px solid #111; white-space: nowrap; overflow: hidden; }
+  .stabs .on { background: #3a3a3d; color: #fff; }
+  .fav { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+  .gd { flex: 1; background: #f9fbfd; color: #1f1f1f; font-family: Arial, Helvetica, sans-serif; display: flex; flex-direction: column; }
+  .gdh { height: 62px; background: #f9fbfd; display: flex; align-items: center; padding: 0 16px; gap: 12px; }
+  .gdh .ttl { font-size: 18px; } .gdh .menu { font-size: 14px; color: #444; display: flex; gap: 14px; margin-top: 3px; }
+  .gdh .share { margin-left: auto; background: #c2e7ff; color: #001d35; border-radius: 18px; padding: 9px 20px; font-size: 14px; font-weight: 600; }
+  .gdh .me { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #8e9aaf, #5b6478); }
+  .gdtb { margin: 0 16px 8px; height: 40px; border-radius: 22px; background: #edf2fa; display: flex; align-items: center; gap: 18px; padding: 0 18px; font-size: 13.5px; color: #444; }
+  .gdtb .sep { width: 1px; height: 20px; background: #c7c7c7; }
+  .gdcanvas { flex: 1; display: flex; justify-content: center; padding-top: 14px; overflow: hidden; background: #f9fbfd; border-top: 1px solid #e1e3e6; }
+  .gdpage { width: 690px; background: #fff; box-shadow: 0 1px 3px rgba(60,64,67,.15), 0 0 0 .5px rgba(60,64,67,.12); padding: 70px 82px; font-size: 15px; line-height: 1.55; }
+  .gdpage h1 { font-size: 26px; font-weight: 400; margin: 0 0 16px; }
+  .caret { display: inline-block; width: 1.5px; height: 18px; background: #000; vertical-align: -3px; animation: blink 1.05s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* Stickies */
+  .sticky { left: 1438px; top: 590px; width: 236px; height: 196px; background: #fef69a; color: #3b3418; border-radius: 3px; overflow: hidden;
+    box-shadow: 0 0 0 .5px rgba(0,0,0,.4), 0 16px 40px rgba(0,0,0,.5); font-size: 13.5px; line-height: 1.6; }
+  .sticky .tb { height: 16px; background: linear-gradient(#f5e874, #efe06a); display: flex; justify-content: space-between; align-items: center; padding: 0 5px; }
+  .sticky .tb i { width: 9px; height: 9px; border: 1px solid rgba(0,0,0,.25); display: block; }
+  .sticky .tx { padding: 7px 10px; }
+
+  /* notifications */
+  .nc { position: absolute; top: 33px; right: 12px; width: 352px; z-index: 40; }
+  .nb { position: relative; display: flex; gap: 11px; padding: 11px 14px 12px 12px; margin-bottom: 18px; border-radius: 18px; background: rgba(46,46,50,.6);
+    box-shadow: 0 0 0 .5px rgba(255,255,255,.13), 0 12px 32px rgba(0,0,0,.35); font-size: 13px; line-height: 17px; }
+  .nb img { width: 36px; height: 36px; flex: none; } .nb .h { display: flex; justify-content: space-between; } .nb b { font-weight: 600; } .nb em { font-style: normal; color: rgba(255,255,255,.5); font-size: 12px; }
+  .nb .body { color: rgba(255,255,255,.88); }
+  .nb .st1, .nb .st2 { position: absolute; left: 10px; right: 10px; height: 14px; bottom: -8px; border-radius: 0 0 16px 16px; background: rgba(46,46,50,.45); z-index: -1; box-shadow: 0 0 0 .5px rgba(255,255,255,.08); }
+  .nb .st2 { left: 22px; right: 22px; bottom: -15px; background: rgba(46,46,50,.3); }
+  .calic { width: 36px; height: 36px; border-radius: 8px; background: #fff; color: #111; text-align: center; flex: none; overflow: hidden; }
+  .calic div:first-child { color: #ff3b30; font-size: 8.5px; font-weight: 700; padding-top: 3px; } .calic div:last-child { font-size: 19px; line-height: 20px; font-weight: 300; }
+
+  /* dock */
+  .dock { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); height: 72px; padding: 0 7px; display: flex; align-items: center; gap: 3px;
+    border-radius: 21px; background: rgba(50,50,56,.42); box-shadow: 0 0 0 .5px rgba(0,0,0,.5), inset 0 0 0 .5px rgba(255,255,255,.22), 0 8px 30px rgba(0,0,0,.3); z-index: 45; }
+  .dk { position: relative; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; }
+  .dk img { width: 60px; height: 60px; }
+  .dk.run::after { content: ""; position: absolute; bottom: -6px; width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.72); }
+  .badge { position: absolute; top: 1px; right: 0; min-width: 20px; height: 20px; border-radius: 10px; background: #ff3b30; color: #fff; font-size: 12.5px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; padding: 0 5px; box-shadow: 0 1px 2px rgba(0,0,0,.35); }
+  .dcal { width: 50px; height: 50px; border-radius: 11px; background: #fff; text-align: center; color: #111; box-shadow: 0 1px 2px rgba(0,0,0,.3); overflow: hidden; }
+  .dcal div:first-child { color: #ff3b30; font-size: 10.5px; font-weight: 700; padding-top: 5px; letter-spacing: .3px; } .dcal div:last-child { font-size: 29px; line-height: 30px; font-weight: 300; }
+  .dsep { width: 1px; height: 50px; background: rgba(255,255,255,.22); margin: 0 6px; }
+
+  .cursor { position: absolute; z-index: 60; filter: drop-shadow(0 1px 1.5px rgba(0,0,0,.5)); }
+
+  /* annotation pins */
+  .pin { position: absolute; z-index: 70; width: 30px; height: 30px; border-radius: 50%; background: #ff375f; color: #fff; font: 700 16px/30px -apple-system, sans-serif; text-align: center;
+    box-shadow: 0 0 0 3px #fff, 0 3px 10px rgba(0,0,0,.6); }
+  .nopins .pin { display: none; }
+  .v2bar { display: flex; gap: 10px; margin: 10px 0 14px; }
+  .v2bar button { font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 7px; border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text-primary); cursor: pointer; }
+  .lg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; font-size: 13.5px; line-height: 1.55; }
+  .lg div { display: flex; gap: 9px; } .lg .n { flex: none; width: 20px; height: 20px; border-radius: 50%; background: #ff375f; color: #fff; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+
+body { margin: 0; background: #000; } .pin { display: none !important; } .v2wrap, .sw { border-radius: 0 !important; }</style></head>
+<body><div class="v2wrap">
+<div class="v2">
+  <!-- menu bar -->
+  <div class="mb glass">
+    <div class="l"><span class="apple"></span><b>Safari</b><span>File</span><span>Edit</span><span>View</span><span>History</span><span>Bookmarks</span><span>Window</span><span>Help</span></div>
+    <div class="r">
+      <svg width="20" height="14" viewBox="0 0 20 14" fill="none" stroke="#fff" stroke-width="1.4"><path d="M5.5 11.5h9a4 4 0 0 0 .6-7.95A5 5 0 0 0 5.6 4.9 3.3 3.3 0 0 0 5.5 11.5Z"/></svg>
+      <span style="display:flex;align-items:center;gap:6px;font-size:12.5px">23%<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".7" y=".7" width="22.6" height="11.6" rx="3.4" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.2"/><rect x="2.4" y="2.4" width="4.6" height="8.2" rx="1.6" fill="#fff"/><path d="M24.8 4.6v3.8a2 2 0 0 0 0-3.8Z" fill="rgba(255,255,255,.55)"/></svg></span>
+      <svg width="17" height="13" viewBox="0 0 17 13" fill="#fff"><path d="M8.5 2.2c2.5 0 4.8 1 6.5 2.6l1.2-1.3A11 11 0 0 0 8.5.4 11 11 0 0 0 .8 3.5L2 4.8a9.2 9.2 0 0 1 6.5-2.6Z"/><path d="M8.5 5.6c1.6 0 3 .6 4.1 1.6l1.2-1.3A7.8 7.8 0 0 0 8.5 3.8c-2 0-3.9.8-5.3 2.1l1.2 1.3c1.1-1 2.5-1.6 4.1-1.6Z"/><path d="M8.5 9c.7 0 1.3.3 1.8.7l1.2-1.3A4.5 4.5 0 0 0 8.5 7.2c-1.2 0-2.2.5-3 1.2l1.2 1.3c.5-.4 1.1-.7 1.8-.7Z"/><circle cx="8.5" cy="11.4" r="1.3"/></svg>
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="6.2" cy="6.2" r="4.6"/><path d="m9.6 9.6 4 4" stroke-linecap="round"/></svg>
+      <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="#fff" stroke-width="1.3"><rect x=".8" y=".8" width="16.4" height="5" rx="2.5"/><rect x=".8" y="8.2" width="16.4" height="5" rx="2.5"/><circle cx="14.6" cy="3.3" r="1.6" fill="#fff" stroke="none"/><circle cx="3.4" cy="10.7" r="1.6" fill="#fff" stroke="none"/></svg>
+      <span>Wed Oct 14&nbsp;&nbsp;11:47 PM</span>
+    </div>
+  </div>
+
+  <!-- desktop icons, arranged from the top-right like Finder does by default -->
+  <div class="di" style="right:14px;top:36px"><div class="ic"><img src="assets/v2-folder.png"></div><span>Time-Based Media</span></div>
+  <div class="di" style="right:14px;top:142px"><div class="ic"><img src="assets/v2-folder.png"></div><span>Screenshots</span></div>
+  <div class="di" style="right:14px;top:248px"><div class="ic"><img class="page" src="assets/th-proscons.png"></div><span>pros and cons (3).docx</span></div>
+  <div class="di" style="right:14px;top:370px"><div class="ic"><img class="page" src="assets/th-transfer.png"></div><span>transfer applic…mitted).pdf</span></div>
+  <div class="di sel" style="right:14px;top:492px"><div class="ic"><img class="page" src="assets/th-unsent.png"></div><span>unsent.txt</span></div>
+  <div class="di" style="right:14px;top:598px"><div class="ic"><img src="assets/th-wav.png"></div><span>soundwalk_t…4.wav</span></div>
+  <div class="di" style="right:124px;top:248px"><div class="ic"><img class="page" src="assets/th-proposal.png"></div><span>midterm proposal FINAL (2).docx</span></div>
+  <div class="di" style="right:124px;top:370px"><div class="ic"><img src="assets/th-img.png"></div><span>IMG_4471.HEIC</span></div>
+  <div class="di" style="right:124px;top:476px"><div class="ic"><img src="assets/th-ss.png"></div><span>Screenshot 2026-10-…12.47 AM</span></div>
+  <div class="di" style="right:124px;top:598px"><div class="ic"><img class="page" src="assets/th-bday.png"></div><span>mia bday ideas.txt</span></div>
+
+  <!-- Finder window: inactive, behind -->
+  <div class="win inactive finder">
+    <div class="fside glass">
+      <div class="tl off"><i></i><i></i><i></i></div>
+      <div class="h">Favorites</div>
+      <div class="it">AirDrop</div><div class="it">Recents</div><div class="it">Applications</div><div class="it">Desktop</div><div class="it cur">Time-Based Media</div><div class="it">Documents</div><div class="it">Downloads</div>
+      <div class="h">iCloud</div><div class="it">iCloud Drive</div>
+      <div class="h">Tags</div><div class="it"><span class="dot" style="background:#ff453a"></span>Red</div><div class="it"><span class="dot" style="background:#ffd60a"></span>Yellow</div>
+    </div>
+    <div class="fmain">
+      <div class="ftool">‹ › &nbsp;Time-Based Media</div>
+      <div class="fgrid">
+        <div><img src="assets/v2-folder.png">soundwalk refs</div><div><img src="assets/v2-folder.png">storyboard</div>
+        <div><img src="assets/v2-generic-doc.png">week 5 notes.txt</div><div><img src="assets/v2-generic-doc.png">audio ideas.m4a</div><div><img src="assets/v2-generic-doc.png">syllabus.pdf</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Safari window: active, front -->
+  <div class="win active safari">
+    <div class="stool">
+      <div class="tl on"><i></i><i></i><i></i></div>
+      <svg width="20" height="16" viewBox="0 0 20 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x=".8" y=".8" width="18.4" height="14.4" rx="3"/><path d="M7 1v14"/></svg>
+      <span style="font-size:20px">‹</span><span style="font-size:20px;opacity:.35">›</span>
+      <div class="saddr"><svg width="10" height="12" viewBox="0 0 10 12" fill="#bbb"><rect x="1" y="5" width="8" height="6.5" rx="1.3"/><path d="M3 5V3.4a2 2 0 0 1 4 0V5" fill="none" stroke="#bbb" stroke-width="1.2"/></svg>docs.google.com</div>
+      <span style="font-size:17px">⇪</span><span style="font-size:20px">+</span><span style="font-size:15px">⧉</span>
+    </div>
+    <div class="stabs">
+      <div class="on"><span class="fav" style="background:#4285f4"></span>TBM Midterm Proposal (draft 4) – Google Docs</div>
+      <div><span class="fav" style="background:#ff0033"></span>how to stop overthinking every decision – YouTube</div>
+      <div><span class="fav" style="background:#e4572e"></span>Time-Based Media – Assignments</div>
+    </div>
+    <div class="gd">
+      <div class="gdh">
+        <svg width="26" height="34" viewBox="0 0 26 34"><path d="M2 0h16l8 8v24a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2Z" fill="#4285f4"/><path d="M18 0v8h8" fill="#a1c2fa"/><path d="M6 16h14M6 20h14M6 24h14M6 28h9" stroke="#fff" stroke-width="2"/></svg>
+        <div><div class="ttl">TBM Midterm Proposal (draft 4)</div><div class="menu"><span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>Tools</span><span>Extensions</span><span>Help</span></div></div>
+        <span class="share">Share</span><span class="me"></span>
+      </div>
+      <div class="gdtb"><span>↶</span><span>↷</span><span>⎙</span><span class="sep"></span><span>100%</span><span class="sep"></span><span>Normal text ▾</span><span class="sep"></span><span>Arial ▾</span><span class="sep"></span><span>− 11 +</span><span class="sep"></span><b>B</b><i>I</i><u>U</u></div>
+      <div class="gdcanvas"><div class="gdpage">
+        <h1>TBM Midterm Proposal</h1>
+        <p><b>Working title:</b> ???</p>
+        <p><b>Concept:</b> I want to make something about how I can never decide anything without asking three people first. Maybe a piece where the viewer makes every choice for me and I just<span class="caret"></span></p>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Stickies -->
+  <div class="win sticky">
+    <div class="tb"><i></i><i></i></div>
+    <div class="tx">TBM proposal — Thu 9AM<br>call mom back<br><u>decide transfer by Fri??</u><br>laundry (actually)<br>return jordan’s charger</div>
+  </div>
+
+  <!-- notifications -->
+  <div class="nc">
+    <div class="nb glass"><img src="assets/v2-app-Messages.png"><div style="flex:1"><div class="h"><b>Mia Chen</b><em>now</em></div><div class="body">you need to try this lol</div></div><span class="st1"></span><span class="st2"></span></div>
+    <div class="nb glass"><div class="calic"><div>OCT</div><div>15</div></div><div style="flex:1"><div class="h"><b>TBM Midterm Proposal</b><em>9:00 AM</em></div><div class="body">Tomorrow · 370 Jay St, Room 410</div></div></div>
+  </div>
+
+  <!-- I-beam cursor resting in the document -->
+  <svg class="cursor" style="left:1004px;top:452px" width="11" height="22" viewBox="0 0 11 22"><path d="M1 1.2c2.3 0 3.5.7 4.5 1.8 1-1.1 2.2-1.8 4.5-1.8M1 20.8c2.3 0 3.5-.7 4.5-1.8 1 1.1 2.2 1.8 4.5 1.8M5.5 3v16" fill="none" stroke="#fff" stroke-width="3"/><path d="M1 1.2c2.3 0 3.5.7 4.5 1.8 1-1.1 2.2-1.8 4.5-1.8M1 20.8c2.3 0 3.5-.7 4.5-1.8 1 1.1 2.2 1.8 4.5 1.8M5.5 3v16" fill="none" stroke="#000" stroke-width="1.2"/></svg>
+
+  <!-- dock -->
+  <div class="dock glass">
+    <div class="dk run"><img src="assets/v2-app-Finder.png"></div>
+    <div class="dk"><img src="assets/v2-app-Launchpad.png"></div>
+    <div class="dk run"><img src="assets/v2-app-Safari.png"></div>
+    <div class="dk run"><img src="assets/v2-app-Messages.png"><span class="badge">1</span></div>
+    <div class="dk run"><img src="assets/v2-app-Mail.png"><span class="badge">214</span></div>
+    <div class="dk"><img src="assets/v2-app-Photos.png"></div>
+    <div class="dk run"><div class="dcal"><div>OCT</div><div>14</div></div></div>
+    <div class="dk"><img src="assets/v2-app-Notes.png"></div>
+    <div class="dk"><img src="assets/v2-app-Music.png"></div>
+    <div class="dk"><img src="assets/v2-app-Pages.png"></div>
+    <div class="dk run"><img src="assets/v2-app-Stickies.png"></div>
+    <div class="dk"><img src="assets/v2-app-Preview.png"></div>
+    <div class="dsep"></div>
+    <div class="dk"><img src="assets/v2-downloads.png"></div>
+    <div class="dk"><img src="assets/v2-trash.png"></div>
+  </div>
+
+  <!-- pins -->
+  <div class="pin" style="left:20px;top:980px">1</div>
+  <div class="pin" style="right:16px;top:28px">2</div>
+  <div class="pin" style="left:36px;top:150px">3</div>
+  <div class="pin" style="left:1310px;top:100px">4</div>
+  <div class="pin" style="right:240px;top:420px">5</div>
+  <div class="pin" style="right:120px;top:500px">6</div>
+  <div class="pin" style="left:1022px;top:440px">7</div>
+  <div class="pin" style="left:1130px;top:990px">8</div>
+  <div class="pin" style="left:1680px;top:600px">9</div>
+</div>
+</div>
+
+
+<script>
+(function () {
+  function fit() {
+    document.querySelectorAll('.v2wrap').forEach(function (w) {
+      var st = w.firstElementChild, W = +(w.dataset.w || 1920), H = +(w.dataset.h || 1080);
+      var s = innerWidth / W; st.style.transform = 'scale(' + s + ')'; w.style.height = (H * s) + 'px';
+    });
+  }
+  addEventListener('resize', fit); fit();
+})();
+</script></body></html>
