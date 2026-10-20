@@ -1,5 +1,7 @@
 # Webintosh - 网页版 macOS Sequoia
 
+> **本分支（`screenlife-film`）是短片《VOLI》。** 打开 `index.html` 会自动播放一部约 4:45 的 screenlife 心理恐怖短片，供 OBS 录制、Premiere 剪辑。录制与后期步骤见 [`docs/film-recording.md`](docs/film-recording.md)，设计文档见 [`docs/superpowers/specs/2026-10-19-screenlife-film-design.md`](docs/superpowers/specs/2026-10-19-screenlife-film-design.md)。原来的互动版本保留在 `choice-story` 分支。
+
 <div align="center">
 
 <img src="Logo.png" width="100" alt="Logo" />

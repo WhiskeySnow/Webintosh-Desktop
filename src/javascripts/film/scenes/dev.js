@@ -114,7 +114,7 @@ export const devScenes = {
             windows.create({ id: "a", app: "Finder", menus: ["File"], x: 100, y: 100, w: 300, h: 200 });
             windows.create({ id: "b", app: "Messages", menus: ["File", "Edit"], x: 500, y: 100, w: 300, h: 200 });
             windows.focus("b");
-            results.windows = windows.snapshot();
+            results.windows = windows.snapshot().filter(win => ["a", "b"].includes(win.id));
             results.menuApp = text(".mb-app");
             windows.get("a").close();
             windows.get("b").close();
